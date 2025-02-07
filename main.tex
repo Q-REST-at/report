@@ -14,6 +14,8 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -22,19 +24,19 @@
 \title{Trade-offs of Quantized LLMs for Requirements and Test Alignment}
 
 \author{
-  \IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
-  \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-  \textit{name of organization (of Aff.)}\\
-  City, Country \\
-  email address or ORCID}
+  \IEEEauthorblockN{Erik Lindstrand}
+  \IEEEauthorblockA{\textit{Computer Science and Engineering} \\
+  \textit{Chalmers and Gothenburg University}\\
+  Gothenburg, Sweden \\
+  elindstr@chalmers.se}
   \and
-  \IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
-  \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-  \textit{name of organization (of Aff.)}\\
-  City, Country \\
-  email address or ORCID}
+  \IEEEauthorblockN{Mariia Zabolotnia}
+  \IEEEauthorblockA{\textit{Computer Science and Engineering} \\
+  \textit{Chalmers and Gothenburg University}\\
+  Gothenburg, Sweden \\
+  mariiaz@chalmers.se}
   \and
-  \IEEEauthorblockN{3\textsuperscript{rd} Michal Spano}
+  \IEEEauthorblockN{Michal Spano}
   \IEEEauthorblockA{\textit{Computer Science and Engineering} \\
   \textit{Chalmers and Gothenburg University}\\
   Gothenburg, Sweden \\
@@ -51,26 +53,169 @@
 \maketitle
 
 \begin{abstract}
-Write the abstract here.
+Large Language Models (LLMs) have shown impressive capabilities in industry,
+academia, and much beyond. However, the larger (and hence more performant) a
+model becomes, the more resources are required for its proper function. Previous
+research discusses compression techniques, notably quantization, to decrease
+both training and operating resources. In this paper, we aimed to investigate
+the impact of quantization of LLMs for REST: requirements (RE) and system tests
+(ST) alignment. Particularly, we investigated the impact of quantization of LLMs
+used for creating trace links between requirements and test case artifacts. To
+achieve this, we have conducted a systematic comparison of the rates of
+alignment given several quantization methods. 
+% MADE UP (for A1, A2)
+We conclude that whilst quantized LLMs become more computationally efficient and
+consume fewer resources, their performance deteriorates significantly at
+quantization levels below 4-bit precision. Given the limitations and scope of
+this paper, we identify new research questions for future exploration and
+provide practical heuristics for implementing quantization in industrial
+applications.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Index terms, a.k.a. ``keywords''.
+Large Language Models, LLMs, Computational Science, Quantization, Requirements
+Engineering, Software Testing, Alignment, Sustainability
 \end{IEEEkeywords}
 
-\section{Introduction}
-Introduction (A1). An example of a citation \cite{xiao2023smoothquant}.
+\section{Introduction}\label{intro}
 
-\section{Methodology}
-As a part of A2.
+% – 1st paragraph: Starts with area of concern and ends with problem
+% – 2nd paragraph: Establishes framework for the research – by reviewing previous studies
+% – 3rd paragraph: Starts with RQ, research method, describes how data collection will be done, and ends with how data analysis will be done.
+% – 4th paragraph: Describes which type(s) of contributions the paper will make
+% – 5th paragraph: Outline of the paper
 
-\section{Background}
-TODO
+The modeling of human language---a long-established field within science---has
+particularly seen its rise with the introduction of web-based transformers
+(e.g. GPT-4, Claude Sonnet) \cite{jonesNaturalLanguageProcessing1994},
+\cite{vaswaniAttentionAllYou2017}. As a result, the recent advancements in LLMs
+have demonstrated a potential in numerous aspects of industry and academia \cite{naveedComprehensiveOverviewLarge2024}.
 
-\section{Related Work}
-As a part of A1.
+Since this scientific field is rapidly advancing, so are the available tools and methods. However, a more performant model is usually more resource-demanding.
+Previously, strategies to cut down computational costs have been identified (e.g.
+\cite{linAWQActivationawareWeight2024},
+\cite{chenEfficientQATEfficientQuantizationAware2024}) in order to support more
+portable devices (such as laptops or smartphones) and, above all, reduce computing overhead \cite{zhuSurveyModelCompression2024}, \cite{rasleyDeepSpeedSystemOptimizations2020}.
+
+% FIXME: This is pretty shitty, just writing it so that we can submit A1.
+%%% Justify the need for such a tool due to the cost and challenges
+A group of researches previously identified that efforts to trace requirements
+to their tests are costly, though invaluable \cite{barmi_alignment_2011}, \cite{AutomatedAlignmentSoftware}.
+%%% Mention the previous tool made and how quantization of such LLMs is of intereset
+% <insert previous study (possibly Nicole's work??)> observe in their work that using
+% LLMs for REST is good. % shitty draft
+% then insert ...
+Given the potential of LLMs, we set out to explore their application in
+a this rather unexplored research area, initially outlined in works such as
+\cite{ivarsson2023automated}.
+
+% RESEARCH QUESTIONS
+
+% ground-truth: mapped requirements with tests
+% - we will apply quantization methods: different bit-precision
+% - how comparable are the results to the ground-truth
+% Effective / efficient
+
+% -- definine in the intro + ask Francisco!
+% TODO: Quantization <-> Quantization-aware training <=> are they the same?
+
+% Possible trade-offs:
+% Cost vs Efficiency (time + operational costs)
+% Cost vs Efficacy (precision/accuracy)
+% Efficacy (precision/accuracy) vs Efficiency (time + operational costs)
+% ^how good the model is           ^how well it uses resources
+
+This paper aims to answer the following \textbf{research questions}:
+
+\begin{tcolorbox}
+\noindent
+\textbf{RQ1}: What are the possible trade-offs when applying quantization to LLMs for requirements and test alignment?
+
+\noindent
+\textbf{RQ2.1}: Are quantized LLMs with lesser bit-precision capable of properly aligning requirements to tests?
+% More specific?: does 4-bit precision have similar accuracy than 20-bit...
+% Defined in the introduction
+
+\noindent
+\textbf{RQ2.2}: How strict a quantization can be applied to the model so that the
+produced alignment is at least 95\% corresponding to the given ground truth?
+
+\setlength\parindent{6pt}
+\textit{Aim}: To investigate the maximum extent of model quantization while
+maintaining feasible alignment. This investigation is significant as it
+determines the optimal threshold for resource reduction.
+\end{tcolorbox}
+
+We observe whether the alignment is still preserved when applying several
+quantization methods. Particularly, the considered quantization method (referred
+to as the ``quantization method'') manipulates the precision of weights during inference \cite{egashiraExploitingLLMQuantization2024}.
+By applying several quantization methods, we discuss whether the desired
+alignment is still intact despite a \textit{stricter}\footnote{By \textit{stricter} we mean a quantization method with lesser bit-precision.} quantization being applied. 
+The scope of the study assumes a single ``base'' model (referred to as the
+``model''), \verb|Llama 3.1|, to which the quantization method is applied to.
+% A lot of this ia made up, unsure how we'll actually do it.
+
+The model will be accessed from a public repository such as \textit{HuggingFace}
+and subsequently quantized (as a part of an automated pipeline job) on the
+\verb|Alvis| platform, offered by the Chalmers Centre for Computational Science
+and Engineering (\url{www.c3se.chalmers.se}).
+The requirements with the aligned tests are provided from our industry partners
+(e.g. Ericsson, G\"oteborg Energi). Indeed, the alignments shall
+\underline{not} be revealed to the model in any form. Our findings arise from a
+systematic comparison of the rates of alignment for each quantization method
+against the \textit{ground truth}\footnote{This essentially stands for the
+desired mapping of requirements and tests, established by the company.} which is provided by the respective
+industry partner.
+
+Lastly, this paper opens up new research questions based on the findings, and concludes with guidance for practitioners on how quantization may speed up, and reduce costs of their LLM-aided tools.
+
+% \section{Methodology}
+% As a part of A2.
+
+\section{Background}\label{background}
+
+\subsection{Requirements Engineering and System Test Alignment}
+
+% ??? SHOULD THIS SIMPLY BE IN RELATED WORK INSTEAD ?????
+Alignment between Requirements Engineering (RE) and System Testing (ST) has been the subject of prior research studies, as has been shown in systematic literature mappings \cite{barmi_alignment_2011}, \cite{karhapaa_what_2017}. Achieving REST alignment involves activities that coordinate RE and ST efforts in order to optimize product development \cite{unterkalmsteinerTaxonomyRequirementsEngineering2014}. Traceability is one of the tools that can be used to achieve alignment through the structuring of artifacts, such as requirement specifications and test cases, by creating connections (or traces) that help to evaluate and improve requirements coverage \cite{bjarnasonChallengesPracticesAligning2014}. 
+%%% TODO: Should we explicitly state that reqs. are "covered" by the tests??
+
+Real-world challenges in aligning RE and ST practices have been examined in previous case studies \cite{bjarnasonChallengesPracticesAligning2014}, \cite{gomesdeoliveiranetoChallengesAligningRequirements2017}. According to both Bjarnasson et al. and Gomes et al., introducing tracing between requirements and test cases is costly, meanwhile, a lack of traceability also comes with significant additional cost \cite{bjarnasonChallengesPracticesAligning2014}, \cite{gomesdeoliveiranetoChallengesAligningRequirements2017}. There is also significant challenge in updating and maintaining traces between RE and ST artifacts, e.g., when requirements change \cite{bjarnasonChallengesPracticesAligning2014}, \cite{gomesdeoliveiranetoChallengesAligningRequirements2017}. Moreover, the case study by Bjarnesson et al. identifies a need, among companies involved in the study, for tools that can manage RE and ST traces \cite{bjarnasonChallengesPracticesAligning2014}.
+
+\section{Related Work}\label{relatedWork}
+
+\subsection{Automated REST alignment using LLMs}
+
+There have been studies into developing more advanced tools to aid in the trace creation process, notably by Ivarsson and Setterberg, showing promise in automating the process using powerful LLMs \cite{ivarsson2023automated}. Their tool achieved an average of 86.394\% across accuracy and recall, although with limitations in terms of precision with an average of 45.582\%. Notably, the computational complexity is non-linear in relation to the input size (requirements + test cases) resulting in an exponentially growing cost both financially and in \textit{time-to-analyze}, i.e., returning the results (trace links), which negatively impacts scalability \cite{ivarsson2023automated}. Given the exponential growth in terms of cost, there is an incentive to improve the efficiency of LLM tools, e.g. through quantization methods, to better utilize automated tracing tools at scale.
+%%% TODO: insert more related work, e.g. Nicole & Bao's thesis  !!!
+
+
+\subsection{Quantization of LLMs} Large Language Models have recently became widely integrated; however, they generally require a significant amount of memory for executing. One of the approaches to maintain precision while reducing the computational resources is quantization. \cite{dettmers2022llmint88bitmatrixmultiplication}. This approach includes normalizing weights and mapping them to quantization buckets defined in a certain range\cite{dettmers2022llmint88bitmatrixmultiplication}. This process is often split into two key approaches where either both activation and weights are quantized, or only weights are compressed in low-bit integers. \cite{dettmers2022llmint88bitmatrixmultiplication}. Moreover, Activation-aware Weight Quantization was recently introduced by J. Lin et al. \cite{linAWQActivationawareWeight2024} with the assumption that weights carry varying levels of importance for LLMs performance, therefore by skipping quantization of the so-called salient weights it is possible to maintain model precision while significantly reducing size.
+
+\subsection{LLM-Powered Test Case Generation.
+}
+LLMs have shown great capabilities in Test Case generation due to their high performance in natural language processing and code analysis. Bhatia et al. \cite{bhatiaUnitTestGeneration2024} discovered that in certain scenarios ChatGPT demonstrates almost the same coverage results compared to the Penguin testing tool; it reached almost 90\% coverage for function- and class-based modular code, however, having a high rate of failed assertions for unorganized procedural code. This question was taken even further by Tsz On Li et al. \cite{li2023nuanceskeyunlockingchatgpt} with a similar discovery that ChatGPT alone has insufficient performance(28.8\%) in identifying failure-inducing test cases and that it often misinterprets correct programs faulty. These findings prompted them to introduce Differential Prompting technique, \cite{li2023nuanceskeyunlockingchatgpt} used to identify failure-inducing test cases more efficiently. Kefan Li et al. have also explored LLM performance in test case generation which resulted in creating a custom TestChain system; it separates the generation of test inputs from test outputs and interacts with Python interpreter directly. They observed 13.84\% improvement in accuracy on the challenging LeetCode dataset compared to the standard process. \cite{li2024largelanguagemodelstest}
+
+% Removed existing tools section since the paper focuses more on agile RE practices to address these challenges, rather than reviewing existing tools, making it less relevant for us%
+
 
 \section*{Acknowledgment}
+
+We dedicate our gratitude to our supervisor Francisco Gomes and responsible for the course in Research methods, Birgit Penzenstadler, for their valuable insights.
+
+\subsection{Assignment 1}
+
+Breakdown of work:
+\begin{itemize}
+    \item Erik: \ref{background}, \ref{relatedWork} A
+    \item Mariia: \ref{relatedWork} B and C
+    \item Michal: \ref{intro} (+abstract)
+\end{itemize}
+
+Additionally, all members of the group collectively participated in literature
+review, proof-reading, defining research-questions, and other tasks.
+
+% Add individual contributions (A1)
 
 \bibliographystyle{IEEEtran}
 \bibliography{lib}
