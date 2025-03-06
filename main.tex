@@ -20,6 +20,7 @@
 \definecolor{main}{HTML}{5989cf}
 \definecolor{sub}{HTML}{cde4ff}  
 \definecolor{fontColor}{HTML}{2D5B9A}
+\definecolor{white}{HTML}{FFFFFF}
 
 % Research Question Box Style
 \newtcolorbox{RQBox}{
@@ -28,6 +29,16 @@
     boxrule = 0pt, 
     leftrule = 6pt
 }
+
+% Glossary box style
+\newtcolorbox{GlossaryBox}{
+    enhanced,
+    boxrule = 0pt,
+    borderline = {0.75pt}{0pt}{main},
+    borderline = {0.75pt}{2pt}{sub},
+    colback = white
+}
+
 
 % Experiment Structure Rounded Box Style
 \newtcolorbox{roundedBox}{
@@ -134,40 +145,47 @@ Quinstedt and Lindgren who developed the \verb|REST-at| tool that this study
 builds upon \cite{quinstedt2024Optimizing}. 
 
 % --> We put the two domains TOGETHER.
-Altogether, quantization is a well-established technique for reducing
-computational costs, and LLMs have proven effective in generating trace links.
-However, given the exponential growth in terms of cost, there is an incentive to
-improve the efficiency of LLM tools, e.g. through quantization methods, to
-better utilize automated trace generation tools at scale. Thus, we address the 
-following \textbf{research questions}:
+%Altogether, quantization is a well-established technique for reducing computational costs, and LLMs have proven effective in generating trace links.
+LLMs have proven effective in generating trace links. However, given the
+exponential growth in terms of cost, there is an incentive to improve the
+efficiency of LLM tools, e.g. through quantization methods, to better utilize
+automated trace generation tools at scale. Therefore, the purpose of this study
+is to evaluate the \textbf{efficacy} of quantized models when used to generate
+REST trace links. Furthermore, the trade-off analysis will consider the
+\textbf{efficiency} of the models, which is a consequence of model size and hence
+affected by the quantization that is applied. 
+
+
+\begin{GlossaryBox}
+\setlength\parindent{6pt}\textbf{Efficacy} metrics: accuracy, precision, recall, F1-score.
+
+\vspace{0.2em}
+
+\setlength\parindent{6pt}\textbf{Efficiency} metrics: time-to-analyze, memory usage.
+
+\end{GlossaryBox}
+
+Thus, we address the following \textbf{research questions}:
 
 \begin{RQBox}
-\noindent
-\textbf{RQ1}: Are quantized LLMs capable of properly aligning requirements to tests?
-% More specific?: does 4-bit precision have similar accuracy than 20-bit...
 
-\noindent
-\textbf{RQ2}: How do Quantized LLMs \textit{perform}\footnote{With \textit{performance} we refer to certain metrics of the experiment: accuracy, precision, recall, F1-score, time-to-analyze, memory usage.} compared to non-quantized LLMs in creating REST trace links?
+\textbf{RQ1}: How do quantized LLMs perform compared to non-quantized LLMs
+in terms of \textbf{efficacy} when used to create REST trace links?
+\vspace{0.5em}
 
-\noindent
-\textbf{RQ3}: What are the trade-offs of using quantized LLMs for requirements and test alignment?
+\textbf{RQ2}: How do quantized LLMs perform compared to non-quantized LLMs in
+terms of \textbf{efficiency} when used to create REST trace links?
+\vspace{0.5em}
 
-\noindent
-\textbf{RQ4}: Are quantized models capable of running on a local machine (e.g. typical development laptop environment) whilst retaining reasonable performance?
+\textbf{RQ3}: What are the trade-offs of using quantized LLMs for REST alignment
+with respect to efficacy versus efficiency?
 
-% TODO: we may consider commenting this out for now.
-% \textit{Aim}: consider writing a ``general'' AIM.
+% Deprecated:
+% \textbf{RQ4}: Are quantized models capable of running on a local machine (e.g. typical development laptop environment) whilst retaining reasonable performance?
 
 \end{RQBox}
 
-The focus of this study is to evaluate the \textbf{efficacy} of quantized models
-when used to generate REST trace links with respect to their non-quantized
-\textit{base-model}\footnote{In this paper, a ``base'' model is one of the
-following: Mistral 7B Instruct-v0.2 (Mistral), Mixtral 8x7B Instruct-v0.1
-(Mixtral), and LLAMA 3 70B-Instruct (LLAMA 3).} counterparts. Furthermore, the
-trade-off analysis will consider the \textbf{effectiveness} of the models, i.e.,
-their GPU memory usage---which is a consequence of model size and thus affected
-by the quantization applied. Our findings arise from a systematic comparison of
+Our findings arise from a systematic comparison of
 the  generated trace links from each model against the \textit{ground
 truth}\footnote{This essentially stands for the desired mapping of requirements
 and tests, established by the industry partner.}. We generate trace links with
@@ -230,7 +248,7 @@ practitioners working at TestScouts, a
 company specializing in software testing \cite{ivarsson2023automated}.
 
 Building on the work of Ivarsson and Setterström, Quinstedt and Lindgren
-conducted a study in which they evaluated and compared the effectiveness of
+conducted a study in which they evaluated and compared the efficiency of
 several different LLMs in creating REST trace links
 \cite{quinstedt2024Optimizing}. The requirements identified in Ivarsson and
 Setterström's study \cite{ivarsson2023automated} were further refined in
@@ -269,6 +287,8 @@ methods as a viable technique to allow for models to run in a non-cloud
 environment while retaining reasonable performance in terms of automating REST
 traceability, as well as analyze and discuss the trade-offs of using quantized
 models for this purpose.
+
+% TODO: "It is still unclear whether using "cheaper" models is useful for REST alignment..."
 
 \subsection{Quantization of LLMs}
 
@@ -320,25 +340,28 @@ previously used by Quinstedt and Lindgren, Ivarsson and Setterström and
 al.\cite{quinstedt2024Optimizing},\cite{ivarsson2023automated} in their
 respective studies. 
 
+% FIXME: moved here from the introduction!
+% .. with respect to their non-quantized
+% \textit{base-model}\footnote{In this paper, a ``base'' model is one of the
+% following: Mistral 7B Instruct-v0.2 (Mistral), Mixtral 8x7B Instruct-v0.1
+% (Mixtral), and LLAMA 3 70B-Instruct (LLAMA 3).} counterparts.
+
 % =*= HYPOTHESES =*=
-%   TODO: Ask Francisco about Hypothesis
-%
-% Here are some possible ways to phrase it:
-% -Increasing Variable A improves X but worsens Y.
-% -There exists an optimal level of A that maximizes X while minimizing its negative impact on Y
+
+% FIXME: something like this, but write it better
+We consider \textbf{factor 1}: model (3 levels; LLama, Mistral, Mixtral);
+\textbf{factor 2}: quantization technique (4 levels: None---``base'', GPTQ,
+GGUF, AWQ). Hence, we generate 12 treatments labeled as $M_{i}$, with $1 \leq i
+\leq 12$.
 
 We define hypotheses for the experiment in the following way:
 \begin{RQBox}
     \begin{itemize}
-    % 2-tail T-test (sort of)
-    % FIXME: this may not work, because Wilcowon doesn't infer directionality
-        \item $h_{0}$: There is no difference in performance between the base model
-            and the quantized model under consideration (\textbf{RQ1}).
-        \item $h_{a}$ The base model is more performant in comparison to its
-            quantized version (\textbf{RQ2}).
+        \item $h_{0}$: There is no difference in performance between the treatments under test. $M_{1} = M_{2} = \dots = M_{12}$ (\textbf{RQ1}).
+        \item $h_{a}$ There is a difference in performance between the treatments under test. $M_{1} \neq M_{2} \neq \dots \neq M_{12}$ (\textbf{RQ2}).
     \end{itemize}
     
-    \textbf{RQ3}, \textbf{RQ4} are answered as a part of a descriptive trade-off
+    \textbf{Note: RQ3} is answered as a part of a descriptive trade-off
     analysis.
 \end{RQBox}
 
@@ -459,7 +482,7 @@ validity of our measurements and subsequently our results.
 The software environment primarily employs the revised REST-at tool to collect
 measurements resulting from individual job executions (i.e., the experiment).
 These are conducted on the Alvis platform. For script execution, we use a
-dedicated pair of NVIDIA A100 Tensor Core
+dedicated set of NVIDIA A100 Tensor Core
 GPUs\footnote{\url{https://www.nvidia.com/en-us/data-center/a100/}} provided by the
 platform. Consequently, all timing metrics are based on this hardware
 configuration. After obtaining the measurements, we employ a post-processing
@@ -477,9 +500,9 @@ readable format.
 
 The collected data will be analyzed using the Wilcoxon signed-rank statistical
 test: collected data is non-parametric---there are no assumptions about its
-distribution---and paired---since we will be comparing the same data points
+distribution---and paired---we will be comparing the same data points
 (rows) between quantized and non-quantized model pairs
-\cite{wohlin2012experimentation}. 
+\cite{wohlin2012experimentation}. % TODO: mention that our nullH is two-sided
 
 The data analysis will include confusion matrix performance indicators:
 accuracy, precision, recall, F1-score, to be able to reason about the efficacy
@@ -487,7 +510,7 @@ of the model under test. The mean, median, and standard deviation will be
 derived from the (repeated) tests for each model to give reliable measurements for
 each of the different metrics. 
 
-We perform pair-wise statistical analysis between the base model and their quantized counterparts, in order to show that any difference in performance is statistically significant, given that this is a gap in the current research. When examining the null hypotheses for each model pair, we can evaluate whether certain quantization techniques are more or less suitable depending on the measured performance. The alternative hypotheses can then be tested should the null hypotheses have been rejected, in order to confirm whether the quantized model version has significantly improved or declined performance. A descriptive analysis of the results will be used to analyze and discuss trade-offs due to applied quantization. 
+We perform pair-wise statistical analysis between the base model and their quantized counterparts, in order to show that any difference in performance is statistically significant, given that this is a gap in the current research. When examining the null hypotheses for each model pair, we can evaluate whether certain quantization techniques are more or less suitable depending on the measured performance. The alternative hypotheses can then be tested should the null hypotheses have been rejected, in order to confirm whether the quantized model version has significantly improved or declined performance. A descriptive analysis of the results will be used to analyze and discuss trade-offs of applied quantization. 
 % Are there 2 or more groups however? What happens when we use levels of treatment, i.e., different quantization methods? -- seems like we would have > 2 groups
 
 The data will be represented in tables comparing
@@ -564,6 +587,8 @@ highlight what has \underline{not} been changed:
 % version is referred to as ``revised'' \verb|REST-at|\footnote{This version of
 % the tool can be accessed via \url{https://github.com/SEM25-BSc/REST-at}.
 % A complete list of changes is noted below, cf. \ref{method}.}.
+% Subsection: Discussion / Results
+% Write about Scalability? How does it perform with 10, 20, 50, 100, entries?
 
 % =*= USE LATER SECTION =*=
 
