@@ -354,17 +354,35 @@ We consider \textbf{factor 1}: model (3 levels; LLama, Mistral, Mixtral);
 GGUF, AWQ). Hence, we generate 12 treatments labeled as $M_{i}$, with $1 \leq i
 \leq 12$.
 
-We define hypotheses for the experiment in the following way:
+\newcommand{\violetType}{\texttt{\textcolor{violet}{type}}}
+
+We define hypotheses for the experiment as follows: The null and alternative
+hypotheses are specified separately for efficacy and efficiency, denoted
+generically as \violetType\ in the text. Each hypothesis is initially tested
+separately and then we apply Post-Hoc Pairwise Comparison test amongst these two
+types.
+
 \begin{RQBox}
-    \begin{itemize}
-        \item $h_{0}$: There is no difference in performance between the treatments under test. $M_{1} = M_{2} = \dots = M_{12}$ (\textbf{RQ1}).
-        \item $h_{a}$ There is a difference in performance between the treatments under test. $M_{1} \neq M_{2} \neq \dots \neq M_{12}$ (\textbf{RQ2}).
-    \end{itemize}
+    $h_{0}$: There is no difference in \textbf{efficacy} between the treatments under
+    test, $M_{1} = M_{2} = \dots = M_{12}$.
+    $h_{a}$ There is a difference in \textbf{efficacy} between the treatments under test.
+    $M_{1} \neq M_{2} \neq \dots \neq M_{12}$ .
     
-    \textbf{Note: RQ3} is answered as a part of a descriptive trade-off
-    analysis.
+    \vspace{0.3em}
+    \textbf{Relates to}: \textbf{RQ1}
+    %\textbf{Note: RQ3} is answered as a part of a descriptive trade-off analysis.
 \end{RQBox}
 
+\begin{RQBox}
+    $h_{0}$: There is no difference in \textbf{efficiency} between the treatments under
+    test, $M_{1} = M_{2} = \dots = M_{12}$.
+    $h_{a}$ There is a difference in \textbf{efficiency} between the treatments
+    under test, $M_{1} \neq M_{2} \neq \dots \neq M_{12}$.
+
+    \vspace{0.3em}
+    \textbf{Relates to}: \textbf{RQ2}
+    %\textbf{Note: RQ3} is answered as a part of a descriptive trade-off analysis.
+\end{RQBox}
 
 % Added for A2 - Give a brief overview of the whole research method and the rest of the methodology section.
 This section outlines the research type and structure, as well as evaluates the
@@ -381,11 +399,17 @@ mitigation strategies.
     \begin{tcbraster}[raster columns=2, raster column skip=5pt, raster equal height=rows, raster row skip=5pt]
         \begin{roundedBox}
             \centering
-            \textbf{Independent Variable (factors)}
+            \textbf{Independent Variables \& Levels}
             \begin{itemize}
-                \item ``Base model''
-                \item Level (treatment)
+                \item Model:
                     \begin{itemize}
+                        \item LLama
+                        \item Mistral
+                        \item Mixtral
+                    \end{itemize}
+                \item Quantization technique:
+                    \begin{itemize}
+                        \item None
                         \item GPTQ Quantization
                         \item GGUF Quantization
                         \item AWQ Quantization % Activation-aware Weight Quantization
@@ -394,7 +418,7 @@ mitigation strategies.
         \end{roundedBox}
         \begin{roundedBox}
             \centering
-            \textbf{Objects (experimental units)}
+            \textbf{Objects}
             \begin{itemize}
                 \item Hardware (Alvis)
                 \item Alvis job-scripts
@@ -404,7 +428,7 @@ mitigation strategies.
         \end{roundedBox}
         \begin{roundedBox}
             \centering
-            \textbf{Dependent Variable (responses)}
+            \textbf{Dependent Variables}
             \begin{itemize}
                 \item Accuracy
                 \item Precision
@@ -416,7 +440,7 @@ mitigation strategies.
         \end{roundedBox}
         \begin{roundedBox}
             \centering 
-            \textbf{Control Variables (parameters)}
+            \textbf{Control Variables}
             \begin{itemize}
                 \item Requirements file
                 \item Test case file
@@ -534,7 +558,7 @@ Based on the guidelines proposed by Wohlin et al. \cite{wohlin2012experimentatio
     
     \textit{Selection of models} - in the process of selecting LLMs to be tested in this study, our aim was to ensure unbiased and fair judgment, although there is a possibility of influence of prevailing trends or widely accepted benchmarks.
     
-    \textit{Quantized LLM quality} - in our study, we have utilized Quatized Models distributed via \textit{HuggingFace} platform, which might have limitations beyond our control. One of them is the parameter values and bias of the training source, which have a direct impact on the artifacts we obtained.
+    \textit{Quantized LLM quality} - in our study, we have utilized quantized models distributed via \textit{HuggingFace} platform, which might have limitations beyond our control. One of them is the parameter values and bias of the training source, which have a direct impact on the artifacts we obtained.
     % alternative -> explore using Alvis for quantizing models ourselves 
 
 \subsection*{\textbf{2) External validity}}
