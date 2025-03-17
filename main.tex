@@ -1,11 +1,7 @@
 % main.tex
-%
-% TODOs/comments
-% -
 
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
-\usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
@@ -14,11 +10,18 @@
 \usepackage{hyperref}
 \usepackage[most]{tcolorbox}
 \usepackage{graphicx}
+\usepackage{svg}
+\usepackage{booktabs}
+\usepackage[numbers,sort&compress]{natbib}
+
 \graphicspath{ {./images/} }
 
 % Define custom colors
-\definecolor{main}{HTML}{5989cf}
-\definecolor{sub}{HTML}{cde4ff}  
+% \definecolor{main}{HTML}{5989cf}
+% \definecolor{sub}{HTML}{cde4ff}  
+% Olive color palette
+\definecolor{main}{HTML}{46AF70}
+\definecolor{sub}{HTML}{E2F3E9}  
 \definecolor{fontColor}{HTML}{2D5B9A}
 \definecolor{white}{HTML}{FFFFFF}
 
@@ -55,7 +58,9 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Trade-offs of Quantized LLMs for Requirements and Test Alignment}
+\title{Evaluating Trade-offs of Quantized LLMs \\ for Requirements and Test Alignment}
+
+% Evaluating Trade-offs of Using Quantized LLMs to Generate Trace Links Between Software Artifacts and Requirements In Software Projects That Utilize Traceability to Enhance Software Development --- A Comparative Experimental Empirical Investigative Analysis for the Purpose of Providing Insights
 
 \author{
   \IEEEauthorblockN{Erik Lindstrand}
@@ -75,345 +80,183 @@
   \textit{Chalmers and Gothenburg University}\\
   Gothenburg, Sweden \\
   spano@chalmers.se}
-  % Add more names?
-  % \and
-  % \IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
-  % \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-  % \textit{name of organization (of Aff.)}\\
-  % City, Country \\
-  % email address or ORCID}
+  \and
+  \centering % TODO: actually center this
+  Supervisor:
+  \IEEEauthorblockN{Francisco Gomes de Oliveira Neto}
+  \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+  \textit{name of organization (of Aff.)}\\
+  City, Country \\
+  email address or ORCID}
 }
 
 \maketitle
 
 \begin{abstract}
-Large Language Models (LLMs) have shown impressive capabilities (e.g., content
-generation, language processing or sentiment analysis) applicable both to
-industry and academia. However, the larger, and thus more performant, a model
-becomes, the more resources are required for its proper function. Previous
-research discusses compression techniques, notably quantization, to decrease
-both training and operating costs. In this paper, we aim to investigate the
-impact of quantization of LLMs for REST alignment. 
-In particular, we investigate the impact of quantized LLMs for generating trace
-links between requirements and test case artifacts. To achieve this, we have
-conducted a systematic comparison of the rates of alignment given several models
-and their quantized counterparts.
-% MADE UP (for A1, A2)
-We conclude that whilst quantized LLMs become more computationally efficient and
-consume fewer resources, their performance deteriorates significantly at
-quantization levels below 4-bit precision. Given the limitations and scope of
-this paper, we identify new research questions for future exploration and
-provide practical heuristics for implementing quantization in industrial REST
-applications.
+Large Language Models (LLMs) have shown impressive capabilities (e.g., in terms of content generation, language processing) in the scientific fields of computing, software engineering, and now yield promising results in REST initiatives. However, the larger, and thus more performant, a model becomes, the more resources are required for its proper operation. As the systems we develop evolve and take in more functionality over time, associated costs grow rapidly. Fortunately, previous research discusses compression techniques, notably quantization, to decrease both training and operating costs. In this paper, we aim to investigate the impact of quantization of LLMs for generating trace links between requirements and test case artifacts. To achieve this, we conduct an experiment evaluating the rates of alignment given numerous models and their quantized counterparts. Our contributions aim to evaluate the feasibility of quantized LLMs in REST applications, focusing on efficacy, efficiency, and practical heuristics for industrial implementation.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Large Language Models, REST, Traceability, Computational Science, Quantization,
-Requirements Engineering, Software Testing, Alignment, Sustainability
+Large Language Models, REST, Traceability, Quantization, Software Testing
 \end{IEEEkeywords}
 
-\section{Introduction}\label{intro}
+\section{Introduction}\label{sec:intro}
 
-The modeling of human language---a long-established field within science---has
-particularly seen its rise with the introduction of web-based transformers (e.g.
-GPT-4, LLAM3) \cite{jones1994Natural}, \cite{vaswani2017Attention}. Since then,
-science, education, and medicine have all made use of LLMs that employ the
-transformer architecture \cite{naveed2024Comprehensive}.
+The modeling of human language---a long-established field within science---has particularly seen its rise with the introduction of web- and transformer-based chatbots (e.g. ChatGPT, DeepSeek) \cite{jones1994Natural,vaswani2017Attention,naveed2024Comprehensive}. Since then, science, education, and medicine have all made use of LLMs that employ the transformer architecture. Moreover, LLMs have been exceptionally helpful in Software Engineering tasks \cite{naveed2024Comprehensive}; notably in requirements engineering \cite{arora2024Advancing} or software testing \cite{dakhel2024Effective, wang2024Software}. In particular, Ivarsson and Setterström have demonstrated that LLM-assisted trace link generation is feasible and yields satisfactory results \cite{ivarsson2023automated}. This claim is further supported by a study of Quinstedt and Lindgren who developed the \verb|REST-at| tool that this study builds upon \cite{quinstedt2024Optimizing}. 
 
-Since this scientific field is rapidly advancing, so are the available tools and
-methods. Typically, a better performing model requires more resources, leading
-to environmental and financial concerns \cite{naveed2024Comprehensive}.
-Fortunately, there exist well-established strategies to decrease computational
-overhead, and one that particularly interests us is \textbf{quantization} (c.f.
-\cite{zhu2024Survey}, \cite{lin2024AWQ}, and \cite{chen2024EfficientQAT}).
+Given the growing size and complexity of software systems, the coordination of work and artifacts is oftentimes challenging. As a result, researchers and practitioners identify \textbf{trace links} between software and development artifacts to manage this complexity \cite{jaber2013Effect}.
 
-On the other hand, given the growing size and complexity of software systems,
-the coordination of work and artifacts is oftentimes challenging. As a result,
-researchers identify \textbf{trace links} in software products to mitigate this
-complexity \cite{jaber2013Effect}. Jabet et al. define a trace link as any link
-between different artifacts, such as a particular \textit{code element} (e.g.,
-software test) in relation to a \textit{design element} (e.g., requirement)
-\cite{jaber2013Effect}. Barmi et al. further explore these trace links between
-Requirements (RE) and System Testing (ST) and conclude that while the efforts to
-align requirements to their tests require substantial resources and effort, they
-prove to be indispensable \cite{barmi2011Alignment}.
+Research and development in LLMs are advancing rapidly, along with their performance capabilities. Typically, a more performant model requires more computational resources due to an increased number of model parameters, leading to financial and environmental concerns \cite{naveed2024Comprehensive}. Fortunately, there exist well-established strategies to mitigate the hardware requirements necessary to load and run LLMs, and one that particularly interests us is \textbf{quantization} (c.f. \cite{shen2024exploring, frantar2023GPTQ, lin2024AWQ, chen2024EfficientQAT}). 
 
-In a later study, Ivarsson and Setterström demonstrate that LLM-assisted
-trace link generation is feasible and yields satisfactory results
-\cite{ivarsson2023automated}. This claim is further supported by a study of
-Quinstedt and Lindgren who developed the \verb|REST-at| tool that this study
-builds upon \cite{quinstedt2024Optimizing}. 
-
-% --> We put the two domains TOGETHER.
-%Altogether, quantization is a well-established technique for reducing computational costs, and LLMs have proven effective in generating trace links.
-LLMs have proven effective in generating trace links. However, given the
-exponential growth in terms of cost, there is an incentive to improve the
-efficiency of LLM tools, e.g. through quantization methods, to better utilize
-automated trace generation tools at scale. Therefore, the purpose of this study
-is to evaluate the \textbf{efficacy} of quantized models when used to generate
-REST trace links. Furthermore, the trade-off analysis will consider the
-\textbf{efficiency} of the models, which is a consequence of model size and hence
-affected by the quantization that is applied. 
-
-
-\begin{GlossaryBox}
-\setlength\parindent{6pt}\textbf{Efficacy} metrics: accuracy, precision, recall, F1-score.
-
-\vspace{0.2em}
-
-\setlength\parindent{6pt}\textbf{Efficiency} metrics: time-to-analyze, memory usage.
-
-\end{GlossaryBox}
-
-Thus, we address the following \textbf{research questions}:
+However, given the exponential growth in terms of cost, there is an incentive to improve the efficiency of LLM tools, e.g. through quantization methods, to better utilize automated trace generation tools at scale. Therefore, the purpose of this study is to evaluate the \textbf{efficacy} of quantized models when used to generate REST trace links. Furthermore, the trade-off analysis will consider the \textbf{efficiency} of the models, which is a consequence of model size and hence affected by the quantization that is applied.
 
 \begin{RQBox}
-
-\textbf{RQ1}: How do quantized LLMs perform compared to non-quantized LLMs
-in terms of \textbf{efficacy} when used to create REST trace links?
-\vspace{0.5em}
-
-\textbf{RQ2}: How do quantized LLMs perform compared to non-quantized LLMs in
-terms of \textbf{efficiency} when used to create REST trace links?
-\vspace{0.5em}
-
-\textbf{RQ3}: What are the trade-offs of using quantized LLMs for REST alignment
-with respect to efficacy versus efficiency?
-
-% Deprecated:
-% \textbf{RQ4}: Are quantized models capable of running on a local machine (e.g. typical development laptop environment) whilst retaining reasonable performance?
-
+    \textbf{RQ1}: How do quantized LLMs perform compared to non-quantized LLMs
+    in terms of \textbf{efficacy} when used to create REST trace links?\\[0.5em]
+    We will evaluate model efficacy using the following metrics: \textit{accuracy, precision, recall, F1-score}
 \end{RQBox}
 
-Our findings arise from a systematic comparison of
-the  generated trace links from each model against the \textit{ground
-truth}\footnote{This essentially stands for the desired mapping of requirements
-and tests, established by the industry partner.}. We generate trace links with
-each model using the \verb|REST-at| tool and a ground truth dataset provided by
-our industry partner TestScouts\footnote{\url{https://testscouts.se/}}. The
-computations are performed on the \verb|Alvis| cloud platform
-\footnote{\url{https://www.c3se.chalmers.se/about/Alvis}}. Both the base and
-quantized models will be accessed from public repositories hosted on
-\textit{HuggingFace}\footnote{\url{https://huggingface.co/}}.
 
-Lastly, this paper (i) answers the outlined RQs, (ii) opens up new research
-questions based on the findings, and (iii) concludes with guidance for
-practitioners on how quantization may speed up and reduce costs of their REST
-alignment efforts.
+\begin{RQBox}
+    \textbf{RQ2}: How do quantized LLMs perform compared to non-quantized LLMs in
+    terms of \textbf{efficiency} when used to create REST trace links? \\[0.5em]
+    We will evaluate model efficiency using the following metrics: \textit{time-to-analyze, GPU memory usage (vRAM)}.
+\end{RQBox}
 
-\section{Background}\label{background}
+\begin{RQBox}
+    \textbf{RQ3}: What are the trade-offs of using quantized LLMs for REST alignment
+    with respect to efficacy versus efficiency? \\[0.5em]
+    We are particularly interested in investigating whether it is possible to balance acceptable recall and F1-score with lowered memory usage.
+\end{RQBox}
 
-%TODO add more subsections? Suggestion: "proprietary / non-proprietary models" or similar
 
-\subsection{Requirements Engineering and System Test Alignment}
+% Encapsulated footnote for reusing in several places 
+\newcommand{\modelsFootnote}{In this paper, a ``baseline'' model is one of the following: Mistral 7B Instruct-v0.2 (i.e., Mistral), Mixtral 8x7B Instruct-v0.1 (i.e., Mixtral), and LLAMA 3 70B-Instruct (i.e., LLAMA 3).} 
 
-REST alignment has been the subject of prior research studies, as has been shown in
-systematic literature mappings \cite{barmi2011Alignment}, \cite{karhaapa2017What}.
-Achieving REST alignment involves activities that coordinate RE and ST efforts
-in order to optimize product development \cite{unterkalmsteiner2014Taxonomy}.
-Traceability is one of the tools that can be used to achieve alignment through
-the structuring of artifacts, such as requirement specifications and test cases,
-by creating connections (or traces) that help to evaluate and improve
-requirements coverage \cite{bjarnason2014Challenges}.
+Our findings arise from an experiment where we compare the generated trace links from each model against the \textit{ground truth}\footnote{This essentially stands for the desired mapping of requirements and tests, established by the respective company.} provided by our industry partner TestScouts\footnote{\url{https://testscouts.se/}}. We generate trace links with each model using the \verb|REST-at| tool which we run on \verb|Alvis|, a cloud platform for scientific computing\footnote{\url{https://www.c3se.chalmers.se/about/Alvis}}. We access both the baseline\footnote{\label{baselineModels}\modelsFootnote} and quantized models from public repositories hosted on \textit{HuggingFace}\footnote{\url{https://huggingface.co/}}.
 
-Real-world challenges in aligning RE and ST practices have been examined in
-previous case studies \cite{bjarnason2014Challenges},
-\cite{gomes2017Challenges}. According to both Bjarnason et al. and Gomes et
-al., introducing tracing between requirements and test cases is costly,
-meanwhile, a lack of traceability also comes with significant additional cost
-\cite{bjarnason2014Challenges}, \cite{gomes2017Challenges}. There is also
-significant challenge in updating and maintaining traces between RE and ST
-artifacts, e.g., when requirements change \cite{bjarnason2014Challenges},
-\cite{gomes2017Challenges}. Moreover, the case study by Bjarnason et al.
-identifies a need, among the companies involved in the study, for tools that can
-manage REST traceability artifacts \cite{bjarnason2014Challenges}.
+Our scientific contributions include: evaluating the feasibility of quantized LLMs for REST in terms of efficacy and efficiency metrics; examining the trade-offs, such as the practicality of use and how efficacy is affected when optimizing for lower operational costs. Furthermore, our technical contributions include revising REST-at to support quantized models as well as updating the tool to comply with other technological changes that are affecting its use and have been introduced since it was developed. Additionally, we aim to provide guidelines for implementing quantization in industrial REST applications.
 
-\section{Related Work}\label{relatedWork}
+\section{Background \& Related Work}\label{background}
 
-\subsection{Automated REST alignment using LLMs} 
+\subsection{Requirements Engineering and System Testing Alignment}
 
-There have been studies on the development of more advanced tools to aid in the
-trace creation process, with Ivarsson and Setterström showing promise in
-automating the process using LLMs by leveraging OpenAI’s GPT-3.5-turbo
-model\cite{ivarsson2023automated}. Their tool achieved an average of 86.394\%
-across accuracy and recall, although with limitations in terms of precision with
-an average of 45.582\%. Notably, the computational complexity is nonlinear in
-relation to the input size (requirements + test cases), resulting in an
-exponentially growing cost both financially and in \textit{time-to-analyze},
-i.e., returning the results (trace links), which negatively impacts scalability
-\cite{ivarsson2023automated}. Furthermore, the study by Ivarsson and Setterström
-included identifying the main requirements for an automated REST tracing tool by
-performing literature reviews as well as conducting interviews with
-practitioners working at TestScouts, a
-company specializing in software testing \cite{ivarsson2023automated}.
+REST (Requirements Engineering and System Testing) alignment has been the subject of prior research studies, as has been shown in systematic literature mappings \cite{barmi2011Alignment, karhaapa2017What}. Achieving REST alignment involves activities that coordinate Requirements Engineering and System Testing efforts in order to optimize product development \cite{unterkalmsteiner2014Taxonomy}. Traceability is one of the tools that can be used to achieve alignment through the structuring of artifacts, such as requirement specifications and test cases, by creating connections (or traces) that help to evaluate and improve requirements coverage \cite{bjarnason2014Challenges}. Jaber et al. define a trace link as any link between different artifacts, such as a particular \textit{code element} (e.g., software test) in relation to a \textit{design element} (e.g., requirement specification) \cite{jaber2013Effect}. 
 
-Building on the work of Ivarsson and Setterström, Quinstedt and Lindgren
-conducted a study in which they evaluated and compared the efficiency of
-several different LLMs in creating REST trace links
-\cite{quinstedt2024Optimizing}. The requirements identified in Ivarsson and
-Setterström's study \cite{ivarsson2023automated} were further refined in
-collaboration with the same industry partner, TestScouts. These requirements
-were then used to develop a tool called \textit{REST-at} (REST alignment tool)
-which is capable of creating REST trace links by interfacing with proprietary
-models, such as OpenAI's GPT-4, through the use of APIs, in addition to using
-non-proprietary locally stored LLMs. Importantly, their study showed that
-smaller LLMs (in terms of number of parameters) were capable of achieving
-comparable results with much larger LLMs, with LLAMA 3 (70B parameters)
-achieving a 100\% recall score on the GBGE dataset, compared to GPT-3.5 (175B
-parameters) which had a recall score of 90.87\%. 
+Real-world challenges in aligning RE and ST practices have been examined in previous case studies \cite{bjarnason2014Challenges,gomes2017Challenges}. According to both Bjarnason et al. and Gomes et al., introducing tracing between requirements and test cases is costly, meanwhile, a lack of traceability also comes with significant additional cost. There is also significant challenge in updating and maintaining traces between RE and ST artifacts, e.g., when requirements change. Moreover, the case study by Bjarnason et al. identifies a need, among the companies involved in the study, for tools that can manage REST traceability artifacts \cite{bjarnason2014Challenges}.
 
-% TODO: NicBao also mentioned how cloud services are inherently not as secure --
-% could also mention this security aspects. 
+\subsection{Automated REST Alignment Using LLMs} 
 
-However, Quinstedt and Lindgren's study also identified a key challenge in
-regards to hardware requirements and cost, due to fact that running the LLMs
-require substantial computational resources. For instance, running the
-previously mentioned LLAMA 3 model with its 70B parameters requires 140 GB vRAM
-\cite{quinstedt2024Optimizing}. In order to mitigate this challenge, the study
-had to be adapted to instead run the models on the Alvis research cloud 
-infrastructure, offering significantly more computational power.
+There have been studies on the development of more advanced tools to aid in the trace creation process, with Ivarsson and Setterström showing promise in automating the process using LLMs by leveraging OpenAI’s GPT-3.5-turbo model\cite{ivarsson2023automated}. Their tool achieved an average of 86.394\% across accuracy and recall, although with limitations in terms of precision with an average of 45.582\%. Notably, the computational complexity is nonlinear in relation to the input size (requirements + test cases), resulting in an exponentially growing cost both financially and in \textit{time-to-analyze}, i.e., returning the results (trace links), which negatively impacts scalability \cite{ivarsson2023automated}. Furthermore, the study by Ivarsson and Setterström included identifying the main requirements for an automated REST tracing tool by performing literature reviews as well as conducting interviews with practitioners working at TestScouts, a company specializing in software testing \cite{ivarsson2023automated}.
 
-% TODO: NicBao page 16:
-% Implication 2: There is a need for developing scalable deployment
-% frameworks for open-weight models that integrate robust security measures,
-% optimize GPU usage, ensure compliance with data governance standards, and
-% minimize operational costs.
+Building on the work of Ivarsson and Setterström, Quinstedt and Lindgren conducted a study in which they evaluated and compared the efficiency of several different LLMs in creating REST trace links \cite{quinstedt2024Optimizing}. The requirements identified in Ivarsson and Setterström's study \cite{ivarsson2023automated} were further refined in collaboration with the same industry partner, TestScouts. These requirements were then used to develop a tool called \textit{REST-at} (REST alignment tool) which is capable of creating REST trace links by interfacing with proprietary models, such as OpenAI's GPT-4, through the use of APIs, in addition to using non-proprietary locally stored LLMs. Importantly, their study showed that smaller LLMs (in terms of number of parameters) were capable of achieving comparable results with much larger LLMs, with LLAMA 3 (70B parameters) achieving a 100\% recall score on the GBGE dataset, compared to GPT-3.5 (175B parameters) which had a recall score of 90.87\%.
 
-Given the challenges faced due to hardware constraint when utilizing LLMs, there
-is a need to explore techniques that would reduce the GPU memory usage. We
-identify a gap in the current research regarding the application of quantized
-LLMs for the purpose of REST alignment, thus we will explore LLM quantization
-methods as a viable technique to allow for models to run in a non-cloud
-environment while retaining reasonable performance in terms of automating REST
-traceability, as well as analyze and discuss the trade-offs of using quantized
-models for this purpose.
+However, Quinstedt and Lindgren's study also identified a key challenge in regards to hardware requirements and cost, due to the fact that running the LLMs require substantial computational resources. For instance, running the previously mentioned LLAMA 3 model with its 70B parameters requires 140 GB vRAM \cite{quinstedt2024Optimizing}. In order to mitigate this challenge, the study had to be adapted to instead run the models on the Alvis research cloud  infrastructure, offering significantly more computational power.
 
-% TODO: "It is still unclear whether using "cheaper" models is useful for REST alignment..."
+Given the challenges faced due to hardware constraints when utilizing LLMs, there is a need to explore techniques that would reduce the GPU memory usage. Moreover, it is still unclear whether using quantized models is useful for the purposes of REST alignment. Hence, we identify a gap in the current research regarding the application of quantized LLMs for the purpose of REST alignment. Thus, we will explore LLM quantization methods as a viable technique to allow for models to run in a non-cloud environment while retaining reasonable performance in terms of automating REST traceability.
 
 \subsection{Quantization of LLMs}
 
 Quantization is one of the LLM compression techniques, along with pruning, knowledge distillation, and low-rank approximation\cite{bai2024beyond}. It stands out for its ability to directly reduce memory usage while maintaining reasonable accuracy and performance of LLMs. Some studies even report a notable acceleration of the inference latency for quantized models\cite{shen2024exploring}.
 
-Drawing a parallel to common image compression principles (cf. Figure \ref{fig:quantvisual}), quantization is performed, in essence, by converting the weights and activations from a high-precision data representation to a reduced-precision format \cite{zhao2025benchmarking}, \cite{bai2024beyond}. This is illustrated by transforming the FP32(32 bits) number to, for example, INT8(8 bits), which is particularly impactful at the scale of billion parameters, enabling a smaller-size model execution on resource-constrained devices.
+Drawing a parallel to common image compression principles (cf. Figure \ref{fig:quantvisual}), quantization is performed, in essence, by converting the weights and activations from a high-precision data representation to a reduced-precision format \cite{zhao2025benchmarking, bai2024beyond}. This is illustrated by transforming the FP32(32 bits) number to, for example, INT8(8 bits), which is particularly impactful at the scale of billion parameters, enabling smaller-size model execution on resource-constrained devices.
 
-\begin{figure}
-    \flushleft
+\begin{figure}[ht]
     \includegraphics[width=\columnwidth]{img}
-    \caption{Analogy Between Color Quantization and LLM Quantization}
+    \caption{Analogy between color quantization and LLM quantization}
     \label{fig:quantvisual}
 \end{figure}
 
-Quantization can be applied 1) during the training phase (\textit{QAT}) which is observed to be highly efficient; however, due to significant resource demands, oftentimes appears impractical \cite{chen2024EfficientQAT}, and 2) post-training (\textit{PTQ}), which is more resource efficient, but can lead to certain levels of performance degradation \cite{shen2024exploring}. To break it down further, quantization granularity levels can vary from per-tensor (one step for the entire matrix), to per-token  (scales per output token) and per-channel (channel step size)\cite{shen2024exploring}. Based on the module of the model that is being quantized, weight, activation and fixed-point quantization are distinguished \cite{bai2024beyond}.
+Quantization can be applied 1) during the training phase (\textit{QAT}) which is observed to be highly efficient; however, due to significant resource demands, oftentimes appears impractical \cite{chen2024EfficientQAT}, and 2) post-training (\textit{PTQ}), which is more resource efficient, but can lead to certain levels of performance degradation \cite{shen2024exploring}. An important quantitative marker of precision loss, quantization error, is often used to assses the degree of approximation loss \cite{lin2024AWQ}.
 
-Having established the theoretical foundation of quantization, we now provide an overview of key methods. \textit{GPTQ} (Generative Pre-trained Transformers Quantization) focuses solely on weights and aims to minimize quantization error through optimal weight rounding \cite{frantar2023GPTQ}. In contrast, \textit{AWQ} (Activation-aware Weight Quantization) assumes that weights carry varying levels of importance, therefore skipping crucial activation outliers while aggressively quantizing the rest helps mitigate accuracy loss \cite{lin2024AWQ}. \textit{GGUF}, in turn a successor of deprecated \textit{GGML}, includes  quantization-aware kernels optimizations and  provides backward-compatible file format among other improvements \cite{rajput2024benchmarking}. \textit{SmoothQuant} \cite{xiao2023SmoothQuant} enables quantization for both activations and weights by managing outlier values and QLoRA (4-bit quantized version of LoRA fine-tuning technique) \cite{dettmers2023qlora} reduces GPU requirements while still preserving performance.
+Having established the theoretical foundation of quantization, we now provide an overview of key methods. \textit{GPTQ} (Generative Pre-trained Transformers Quantization) focuses solely on weights and aims to minimize quantization error through optimal weight rounding. It is almost twice as effective as its one-shot predecessors and is capable of quantizing a 175 billion parameter model in a few hours with minimal accuracy loss\cite{frantar2023GPTQ}. \textit{AWQ} (Activation-aware Weight Quantization) assumes that weights carry varying levels of importance; therefore skipping crucial activation outliers while aggressively quantizing the rest helps mitigate accuracy loss. It also shows approximately 3x faster inference speed on a desktop, even allowing deployment and execution of a 13-billion model on a laptop with 8GB of RAM, which is of high interest for our study \cite{lin2024AWQ}. \textit{GGUF} (GPT-Generated Unified Format), in turn a successor of the deprecated \textit{GGML} (GPT-Generated Model Language), includes  quantization-aware kernels optimizations and  provides backward-compatible file format among other improvements. By offering such features as single-file deployment and improved loading and saving speed, it introduces a smoother workflow for forking with LLMs \cite{rajput2024benchmarking}. \textit{SmoothQuant} \cite{xiao2023SmoothQuant} enables quantization for both activations and weights by managing outlier values and QLoRA (4-bit quantized version of LoRA fine-tuning technique) \cite{dettmers2023qlora} reduces GPU requirements while still preserving performance.
 
-Described techniques demonstrate superior advancements and efficiency, leading us to adopt GPTQ-, GGUF- and AWQ- quantized models in this study.
+% The described approaches demonstrate not only superior advancements and efficiency, but are also feasible for us to experiment with. Therefore, in this study, we plan to quantize each of the baseline models\footnotemark[\getrefnumber{baselineModels}] using the GPTQ, GGUF and AWQ techniques to reduce model size \footnote{By ``size'' we refer to bit width which in turn affects the needed memory for execution} to mitigate hardware requirements. Later we employ them to generate REST trace links, analyze their performance, and answer our RQs.
 
-\section{Research Methodology}\label{method}
+The described approaches demonstrate not only superior advancements and efficiency, but are also feasible for us to experiment with. Therefore, in this study, we plan to access models from HuggingFace that have been quantized using the following techniques: GPTQ, GGUF and AWQ. These approaches reduce model size\footnote{By ``size'' we refer to \textit{bit width} which in turn affects the memory needed for execution} to mitigate hardware requirements. Later we employ them to generate REST trace links, analyze their performance, and answer our RQs. 
 
-\subsection{Overview}
+\section{Research Methodology}\label{sec:method}
 
-% - Describe and explain the research strategy (i.e. Surveys , Experiments , MSR , Case Study , Design Science , Action Research ). Motivate your choice of this method to address this problem.
-% - Give a brief overview of the whole research method and the rest of the methodology section.
-% - (For Experiments ) Describe independent/control/dependent variables, how the
-% subjects were divided etc. Describe research questions as formal hypotheses
+% TODO: Mention something here about insecure quantization (see Exploiting quantization). -> WHY we consider quantization on our own.
 
+This section outlines the research type and its design (cf. Figure \ref{fig:method-overview}), and defines the scope pertaining to identified RQs. We structure our methodology section following the experimental process recommended by Wohlin et al. \cite{wohlin2012experimentation}. Furthermore, we explain and motivate the choice of methods and statistical tests for data analysis. Lastly, we acknowledge identified validity threats accompanied by mitigation strategies.
 
-We perform \textbf{Experimentation}\cite{wohlin2012experimentation}, a research method commonly used
-to explore empirical correlations between several factors, in our case,
-quantized LLMs and their ability to create REST links. By the nature of
-experiment, we have control over subjects, objects, and instrumentation in order
-to manipulate experimental units and draw conclusions on dependent variable
-output. Experiments are conducted to test the hypothesis and comparatively
-access the impact of specific variables in a controlled setting, which is the
-most suitable setup for answering our Research Questions.
+We perform an \textit{experiment}, a research method commonly used to explore empirical correlations between several factors, in our case, LLM models and quantization techniques. Given the nature of  experiments, we gain control over subjects, objects, and instrumentation in order to operate on experimental units and draw conclusions on dependent variable output. Experiments are conducted to test the hypotheses and comparatively assess the impact of specific variables in a controlled setting, which is the most suitable setup for answering our RQs.
 
-Within a \textit{Controlled Experiment}, we aim to study the effect of
-\textit{Independent Variables} (such as selected baseline LLM models and
-quantization techniques) on \textit{Response Variables} (such as precision,
-recall, F1-score, and others)\cite{wohlin2012experimentation}. In the design of
-the experiment we defined a number of treatments, specific manipulations applied
-to subjects\cite{wohlin2012experimentation}.  In this case, \textit{treatments}
-involve a comparative evaluation of LLama, Mistral, and Mixtral in both their
-non-quantized and quantized versions for REST alignment. These models were
-previously used by Quinstedt and Lindgren, Ivarsson and Setterström and
-al.\cite{quinstedt2024Optimizing},\cite{ivarsson2023automated} in their
-respective studies. 
+\begin{figure}[h]
+    \centering
+    \includesvg[width=\columnwidth]{method-overview-refined.svg}
+    \caption{Overview of the research methodology process}
+    \label{fig:method-overview}
+\end{figure}
 
-% FIXME: moved here from the introduction!
-% .. with respect to their non-quantized
-% \textit{base-model}\footnote{In this paper, a ``base'' model is one of the
-% following: Mistral 7B Instruct-v0.2 (Mistral), Mixtral 8x7B Instruct-v0.1
-% (Mixtral), and LLAMA 3 70B-Instruct (LLAMA 3).} counterparts.
+\subsection{Scope}
+We define the scope of our experiment using the said framework of Wohlin et al. \cite{wohlin2012experimentation}. That is, we analyze quantized LLMs for the purpose of evaluation with respect to their efficacy, efficiency, and practicality from the point of view of developers and/or managers in the context of industry REST alignment initiatives. A more concrete realization of the scope is described in the following paragraphs.
 
-% =*= HYPOTHESES =*=
+\subsection{Planning}
 
-% FIXME: something like this, but write it better
-We consider \textbf{factor 1}: model (3 levels; LLama, Mistral, Mixtral);
-\textbf{factor 2}: quantization technique (4 levels: None---``base'', GPTQ,
-GGUF, AWQ). Hence, we generate 12 treatments labeled as $M_{i}$, with $1 \leq i
-\leq 12$.
+We will conduct a full factorial controlled experiment. There are two factors in our study: baseline models\footnotemark[\getrefnumber{baselineModels}] and quantization approaches. There are three levels for the models: LLama, Mistral, and Mixtral; and four levels for the quantization: \textit{None}, GPTQ, GGUF and AWQ. We generate $3 \times 4 = 12$ treatments. Our choice of models is based on the previous work of Quinstedt and Lindgren \cite{quinstedt2024Optimizing} as they opened up the questions explored in our study; thus aligning the model selection with their study allows for a more detailed and direct trade-off comparison.
 
-\newcommand{\violetType}{\texttt{\textcolor{violet}{type}}}
+The dependent variables reflect the definition of performance in this study; they are: accuracy, precision, recall, and F1-score (RQ1, efficacy), as well as time-to-analyze and GPU memory-usage (RQ2, efficiency).
 
-We define hypotheses for the experiment as follows: The null and alternative
-hypotheses are specified separately for efficacy and efficiency, denoted
-generically as \violetType\ in the text. Each hypothesis is initially tested
-separately and then we apply Post-Hoc Pairwise Comparison test amongst these two
-types.
+Our control variables include requirements specification and test case files, as well as the ground truth which specifies the correct trace links between tests and requirements. This data comes from two datasets: the first has been provided to us by our industry partner and originates from G\"oteborg Energi, the second was sourced from Bluetooth Headset Profile 1.2\footnote{\url{https://www.bluetooth.com/specifications/specs/headset-profile-1-2/}}. Additionally, our control variables include a prompt template which will be used with the REST-at tool and is verified in the previous study by Quinstedt and Lindgren \cite{quinstedt2024Optimizing}). They found that various prompt templates lead to fluctuations in the results; therefore we have selected the most performant one. Furthermore, model hyper-parameters will be kept constant and configured to be as similar as possible between different models, such as model \textit{temperature} that controls the randomness of an LLM's output. We also standardize the Python environment (version) as it has a direct impact on code execution speeds and therefore also on our results.
 
-\begin{RQBox}
-    $h_{0}$: There is no difference in \textbf{efficacy} between the treatments under
-    test, $M_{1} = M_{2} = \dots = M_{12}$.
-    $h_{a}$ There is a difference in \textbf{efficacy} between the treatments under test.
-    $M_{1} \neq M_{2} \neq \dots \neq M_{12}$ .
-    
-    \vspace{0.3em}
-    \textbf{Relates to}: \textbf{RQ1}
-    %\textbf{Note: RQ3} is answered as a part of a descriptive trade-off analysis.
-\end{RQBox}
+An overview of the experimental design can be found in Figure \ref{fig:exp-design}. See Section \ref{sec:instrumentation} for a further specification of the experiment objects.
 
-\begin{RQBox}
-    $h_{0}$: There is no difference in \textbf{efficiency} between the treatments under
-    test, $M_{1} = M_{2} = \dots = M_{12}$.
-    $h_{a}$ There is a difference in \textbf{efficiency} between the treatments
-    under test, $M_{1} \neq M_{2} \neq \dots \neq M_{12}$.
+%%%%%%%%%%%%%%%%%% HYPOTHESIS TABLE %%%%%%%%%%%%%%%%%%
 
-    \vspace{0.3em}
-    \textbf{Relates to}: \textbf{RQ2}
-    %\textbf{Note: RQ3} is answered as a part of a descriptive trade-off analysis.
-\end{RQBox}
+\newcommand{\equalM}{$M_{1} = \dots = M_{12}$}
+\newcommand{\notEqualM}{$M_{1} \neq \dots \neq M_{12}$}
 
-% Added for A2 - Give a brief overview of the whole research method and the rest of the methodology section.
-This section outlines the research type and structure, as well as evaluates the
-appropriateness of scope in connection to identified \textbf{RQs}. Data
-collection section defines procedures for sampling subjects of the study.
-Further we explain and motivate the choice of methods and statistical tests we
-use for data analysis and acknowledge identified threats to validity alongside
-mitigation strategies.
+\begin{table}[h]
+    \centering
+    \caption{Experiment Hypotheses}
+    \renewcommand{\arraystretch}{1.65} % original value 1.5
+    \begin{tabular}{@{} c p{3.5cm} p{3.5cm} @{}}
+    \toprule
+    &\multicolumn{1}{c}{\textbf{(i) Efficacy RQ1}}
+    &\multicolumn{1}{c}{\textbf{(ii) Efficiency RQ2}} \\  
+    \midrule
+    $h_{0}$ % <-- NULL HYPOTHESIS %
+    & There is no difference in \textbf{efficacy} between the treatments
+    under test; \equalM.
+    & There is no difference in \textbf{efficiency} between the treatments
+    under test; \equalM.\\
+    $h_{a}$ % <-- ALT HYPOTHESIS %
+    & There is a difference in \textbf{efficacy} between the treatments
+    under test; \notEqualM.
+    & There is a difference in \textbf{efficiency} between the treatments
+    under test; \notEqualM.\\
+    \bottomrule
+    &\multicolumn{2}{c}{Note: the individual treatments are labeled as $M_{1\dots12}$.} \\
+    \end{tabular}
+    \label{tab:hypothesis}
+\end{table}
 
+First, we will collect data and derive metrics from repeated test iterations. The process is repeated on both datasets with 10 repetitions per treatment; we altogether obtain $2 \times 12 \times 10 = 240$ artifacts containing trace links. When analyzing the data, we will initially examine the treatments from two perspectives: (i) efficacy, and (ii) efficiency---evaluating the null hypotheses for these groups of metrics separately (cf. Table \ref{tab:hypothesis}). After testing for our null and alternative hypotheses, we apply a post-hoc pairwise comparative analysis of the treatment pairs. Finally, a descriptive analysis will investigate trade-offs of using quantized LLMs for REST alignment: we will combine the results from both efficacy and efficiency metrics, as well as some additional factors (e.g., implementation challenges, learning curve, etc.). 
+
+%%%%%%%%%%%%%%%%%% EXPERIMENTAL DESIGN FIGURE %%%%%%%%%%%%%%%%%%
+
+\begin{figure}[h]
 \begin{center}
-   \begin{center}
-        \textbf{Experimental Design}
-    \end{center}
     \begin{tcbraster}[raster columns=2, raster column skip=5pt, raster equal height=rows, raster row skip=5pt]
         \begin{roundedBox}
             \centering
             \textbf{Independent Variables \& Levels}
             \begin{itemize}
                 \item Model:
-                    \begin{itemize}
-                        \item LLama
-                        \item Mistral
-                        \item Mixtral
-                    \end{itemize}
+                \begin{itemize}
+                    \item LLama
+                    \item Mistral
+                    \item Mixtral
+                \end{itemize}
                 \item Quantization technique:
-                    \begin{itemize}
-                        \item None
-                        \item GPTQ Quantization
-                        \item GGUF Quantization
-                        \item AWQ Quantization % Activation-aware Weight Quantization
-                    \end{itemize}
+                \begin{itemize}
+                    \item None
+                    \item GPTQ Quantization
+                    \item GGUF Quantization
+                    \item AWQ Quantization
+                \end{itemize}
             \end{itemize}
         \end{roundedBox}
         \begin{roundedBox}
@@ -446,7 +289,7 @@ mitigation strategies.
                 \item Test case file
                 \item Ground truth file
                 \item Prompt template
-                \item Model hyper-parameters \\ (e.g. temperature)
+                \item Model hyper-parameters
                 \item Python environment (version)
             \end{itemize}
         \end{roundedBox}
@@ -459,61 +302,22 @@ mitigation strategies.
                 \item Structured trace links
             \end{itemize}
         \end{roundedBox}
+    \caption{Overview of the experimental design}
+    \label{fig:exp-design}
 \end{center}
+\end{figure}
 
-\subsection{Data Collection}
+\subsubsection{Instrumentation}\label{sec:instrumentation}
+For our instrumentation, we extend REST-at by adding support for (i) quantized models, and (ii) logging efficiency data from the models' execution. We run our experiment on Alvis, a cloud platform for scientific computing. The system is built around multiple NVIDIA GPUs, and allows executing jobs on demand. Therefore, we execute the experiments on a dedicated set of available NVIDIA A100 Tensor Core GPUs\footnote{\url{https://www.nvidia.com/en-us/data-center/a100/}}, which inherently makes all performance and efficiency metrics rely on this hardware configuration.
 
-% A) Describe and motivate data collection procedures, including how subjects are
-% chosen (sampling), number of subjects, etc.
-%   - Describe subjects (demographics, experience, etc.)
-%
-% B) Describe any instruments used in your study, e.g., interview guides,
-% surveys, observation sheets, include these in your report (could be in appendix).
-%
-% C) Describe what types of data will be collected, is it qualitative,
-% quantitative or both?
-%
-% D) What tooling, if any, will you use in the study (e.g., survey tool, MSR
-% tool)
-%
-% E) Describe data collection procedures, sampling method(s), report the
-% population and size of the sample.
-% 
-% F) If any instrument is used (e.g. document needed for the experiment,
-% pre-questionnaire to check subjects background/experience, follow-up
-% questionnaire), example questions/information from ALL of the needed instruments
-% MUST be included.
+For our experiment, we require a set of requirements linked with a corresponding set of tests. The datasets with trace links serve as \textit{ground truth} since these are established by the authors from the companies. In addition, we plan to search for more datasets in \textit{Zenodo}\footnote{\url{https://zenodo.org}} from existing research and open-source projects. 
 
-For the scope of this study, we consider two datasets originating from Ericsson
-AB and G\"oteborg Energi, respectively. These datasets serve as \textit{ground
-truth} since they include the desired trace links established by the authors.
-The requirement and software test pairs are sampled from each dataset to create
-subsets ranging from 75 to 80 items using PRNG\footnote{Pseudo-random Number
-Generator, cf. \url{https://epubs.siam.org/doi/abs/10.1137/0215025}}. This
-sampling is performed to reduce overall computational costs. No human subjects
-are involved in this phase beyond the authors of this paper, who oversee the
-experiments in the event of technical difficulties. We gather the following
-quantitative measures: (i) computed traces given (a) model and (b) dataset, and
-(ii) benchmarks of job executions (i.e., running time, consumed resources).
+\subsubsection{Sampling and Data Collection}
+This sampling is performed to reduce overall computational costs. The requirement and software test pairs are sampled from each dataset to create subsets ranging from 75 to 80 items using PRNG\footnote{Pseudo-random Number Generator, cf. \url{https://epubs.siam.org/doi/abs/10.1137/0215025}}. No human subjects are involved in this phase beyond the authors of this paper, who oversee the experiments in the event of technical difficulties.
 
-Because of the stochastic nature of LLMs it is important that we perform
-repeated tests on the same input for each of the models in order to be able to
-include standard deviation measurements across the different metrics, this will
-allow us to reason about the consistency of each model as well as increase the
-validity of our measurements and subsequently our results.
-% Question: If we repeat the test multiple times would the columns get multiplied by N in length or would this mean we have multiple different groups?
+Note that, given the stochastic nature of LLMs, it is important that we perform repeated tests on the same input for each of the treatments in order to include standard deviation measurements across the different metrics; for this reason, we will perform 10 repetitions for each treatment. This will allow us to reason about the consistency of each treatment as well as increase the validity of our measurements and subsequently the results of our analysis.
 
-The software environment primarily employs the revised REST-at tool to collect
-measurements resulting from individual job executions (i.e., the experiment).
-These are conducted on the Alvis platform. For script execution, we use a
-dedicated set of NVIDIA A100 Tensor Core
-GPUs\footnote{\url{https://www.nvidia.com/en-us/data-center/a100/}} provided by the
-platform. Consequently, all timing metrics are based on this hardware
-configuration. After obtaining the measurements, we employ a post-processing
-script that parses and consolidates outputs from all executions into a more
-readable format.
-
-\subsection{Data Analysis}
+\subsection{Analysis and Interpretation}
 
 % - Describe and motivate the methods for analysing the data:
 %  - Describe any quantitative data analysis that will be performed, if applicable.
@@ -522,28 +326,23 @@ readable format.
 %  and analysis you will apply and how you will interpret the results
 % – Motivate the selection of statistical tests.
 
-The collected data will be analyzed using the Wilcoxon signed-rank statistical
-test: collected data is non-parametric---there are no assumptions about its
-distribution---and paired---we will be comparing the same data points
-(rows) between quantized and non-quantized model pairs
-\cite{wohlin2012experimentation}. % TODO: mention that our nullH is two-sided
+The data analysis includes confusion matrix performance indicators: accuracy, precision, recall, F1-score, to be able to reason about the efficacy of the treatment under test. We derive the mean, median, and standard deviation from the (repeated) tests for each treatment to give reliable measurements for all the different metrics. 
 
-The data analysis will include confusion matrix performance indicators:
-accuracy, precision, recall, F1-score, to be able to reason about the efficacy
-of the model under test. The mean, median, and standard deviation will be
-derived from the (repeated) tests for each model to give reliable measurements for
-each of the different metrics. 
+Our experiment is full factorial and includes two factors. The data is paired---as we will be comparing the same data points (rows) between different treatments. First, we will analyze the distribution of the collected data. If the necessary assumptions are met, we will use a parametric two-way ANOVA statistical test. Should the assumptions of ANOVA not hold, we will instead use a non-parametric Friedman test---an alternative to repeated ANOVA-measures \cite{mccrum2008statisticalTests}.
 
-We perform pair-wise statistical analysis between the base model and their quantized counterparts, in order to show that any difference in performance is statistically significant, given that this is a gap in the current research. When examining the null hypotheses for each model pair, we can evaluate whether certain quantization techniques are more or less suitable depending on the measured performance. The alternative hypotheses can then be tested should the null hypotheses have been rejected, in order to confirm whether the quantized model version has significantly improved or declined performance. A descriptive analysis of the results will be used to analyze and discuss trade-offs of applied quantization. 
-% Are there 2 or more groups however? What happens when we use levels of treatment, i.e., different quantization methods? -- seems like we would have > 2 groups
+%First, we analyze the collected data using the Kruskal-Wallis statistical test: collected data is non-parametric---there are no assumptions about its distribution---and paired---we are comparing the same data points (rows) between different treatments \cite{wohlin2012experimentation}. % RIP IN PIECE MY SWEET PRINCE ;_; KRUSKWALL 1952-2025
 
-The data will be represented in tables comparing
-the results from the different models. For this purpose, \textit{mean $\pm$ standard
-deviation} will be displayed for each of the relevant metrics. Data will also be
-represented using box-plots in order to visualize the distribution as well as
-any outliers in each model's performance. 
+Should the null hypothesis be rejected, indicating that there is a significant difference between at least one of the treatment pairs, we conduct a pairwise post-hoc analysis to identify the differing pairs as well as in which direction they differ. By evaluating the treatment pairs, we can examine whether certain quantization techniques result in better model performance within the given context. 
+%The z-score based Dunn's test will be used for the post-hoc analysis, as the sample size is $>$30 \cite{dunn1964dunnTest}. 
+% Can also mention that it is a rank-based follow-up test to Kruskal-Wallis - if we can find a source ... -_-
+% ...or the Conover-Iman test \cite{conover1979conoverImanTest} will be used depending on the sample size. 
+% NOTE: keeping this here since we might use this test instead (it has better statistical power)? Also, is it okay that we cite the original sources here and not literature that recommends the test's usage?
+We use the Holm–Bonferroni method to mitigate \textit{alpha inflation}---that would otherwise increase the risk of type I errors, while also reducing the risk of type II errors compared to the regular Bonferroni method \cite{abdi2010HolmBonferroni}.
+Note that we will decide the appropriate post-hoc test method at a later stage and update this section accordingly.
 
-% TODO: MENTION QUANTIZATION STRICTNESS -if we pair wise the base-model with the quantized models, assuming the quant models have more "aggressive" quantization applied, we could identify the "drop-off" point, i.e., when the quantized models start to significantly perform worse --- useful if they perform equally well up until some point 
+We conduct a descriptive statistical analysis of the results to analyze and discuss the trade-offs of applying quantization to LLMs within the given context. We are particularly interested in examining whether there exists any treatment(s) that retains acceptable / usable recall and F1-score results despite significantly reducing GPU memory-usage. Thus, we combine the efficacy and efficiency metrics alongside the following additional factors: implementation challenges, learning curve, model vRAM usage compared with commercial GPU alternatives, cost comparison of manual and automatic solutions. 
+
+We choose to represent the data in tables comparing the results from the different treatments. For this purpose, \textit{mean $\pm$ standard deviation} is displayed for each of the relevant metrics. We also select box-plots in order to visualize the distribution as well as any outliers in each treatment's performance. Lastly, we use bar charts to give a clear comparison of the performance as a result of the different quantization techniques.
 
 \subsection{Threats to Validity}
 % - Describe internal validity threats and mitigations.
@@ -551,59 +350,54 @@ any outliers in each model's performance.
 % - Describe external validity threats and mitigations.
 % - If applicable for your research method, describe further validity threats and mitigations under further categories.
 
-% Ideas: 
-Based on the guidelines proposed by Wohlin et al. \cite{wohlin2012experimentation} we identify the following threats to validity that might have influenced research findings: 
+Based on the guidelines proposed by Wohlin et al. \cite{wohlin2012experimentation} we identify the following threats to validity that might have influenced our research findings: 
 \subsection*{\textbf{1) Internal validity}}
-    \textit{Response variability }- due to stochastic behavior of LLMs, the same prompt can result in different outputs when executed several times, this behavior can not be mitigated. Instead, we try to eliminate this risk by invoking prompts multiple times and defining consistent hyper-parameters.
-    
-    \textit{Selection of models} - in the process of selecting LLMs to be tested in this study, our aim was to ensure unbiased and fair judgment, although there is a possibility of influence of prevailing trends or widely accepted benchmarks.
-    
-    \textit{Quantized LLM quality} - in our study, we have utilized quantized models distributed via \textit{HuggingFace} platform, which might have limitations beyond our control. One of them is the parameter values and bias of the training source, which have a direct impact on the artifacts we obtained.
-    % alternative -> explore using Alvis for quantizing models ourselves 
+    \textit{Response variability}: due to stochastic behavior of LLMs, the same prompt can result in different outputs when executed several times; we mitigate this risk by invoking prompts multiple times and defining consistent hyperparameters.
+
+    \textit{Selection of models}: in this study, we select open-weight, state-of-the-art LLMs representative of a common choice among practitioners. This selection also leverages on the previous research by Quinstedt and Lindgren \cite{quinstedt2024Optimizing}, which we are building on. Aligning the selection of LLMs with their results allows for a more extensive and direct trade-off comparison. More models can be explored in future work, and we provide instrumentation in the Methodology section to facilitate the smooth integration.
+
+    \textit{Quantized LLM quality}: we have utilized quantized models distributed via the \textit{HuggingFace} platform. While there is a risk in depending on quantized models from a third-party service, HuggingFace is one of the main sources for developers or organizations to download and/or deploy open weight models. As such, these models are likely to be used by practitioners, meaning that the results of our study are representative of the real-world use of quantized LLMs, given that this assumption holds.
 
 \subsection*{\textbf{2) External validity}}
     
-    \textit{Domain-Specific Applicability} - the observed results might only be applicable within the explored domain due to the data specificity and scoped research questions.
-    
-    \textit{Results reproducibility on a local machine (this threat will be elaborated on in later stages of development, as it depends on the viability of a local environment setup for running the experiments. Otherwise, experiments will be conducted on the Alvis platform).}
+    \textit{Domain-Specific Applicability}: our study evaluates quantized LLMs within the specific use case of REST alignment. Exploring the trade-off of quantization in using LLMs for other Software Engineering tasks is beyond the scope of our thesis; however, it could be explored in future work.
 
 \subsection*{\textbf{3) Construct validity}}
-% \textit{    *concerns generalisation of the experiment result to concept or theory behind the experiment*
-% }
-\textit{Ground Truth Validity} - REST alignment mappings obtained from our Industry Partner have been fact-checked, verified, and as a result accounted for as ground truth; however, any potential bias, error, or human factor in its creation could have influenced the reliability of evaluation.
+
+\textit{Ground Truth Validity}: the REST alignment mappings that are used in this study as ground truth have been obtained from our Industry Partner (specializing in software testing) and are representative of software artifacts in industry. However, any potential human bias, error, or other factor influencing the creation of these trace links could have an impact on the results of this study/experiment.
+
+\textit{The need for more datasets}: in this study we are using two datasets to evaluate the tradeoffs of using quantization. However, incorporating more datasets could provide a broader perspective and improved generalization of the results, opening up new opportunities for future research to validate obtained results across different contexts.
 
 \section*{Acknowledgment}
-We dedicate our gratitude to our supervisor Francisco Gomes and responsible for
-the course in Research methods, Birgit Penzenstadler, for their valuable
-insights. Moreover, we're thankful for the computing resource from Alvis offered
-by the Chalmers Centre for Computational Science and Engineering 
+We dedicate our gratitude to our supervisor Francisco Gomes de Oliveira Neto and responsible for the course in Research methods in Software Engineering, Birgit Penzenstadler, for their valuable insights. Moreover, we are thankful for the computing platform, Alvis, offered by the Chalmers Centre for Computational Science and Engineering.
 
-\section*{Assignment 2: Work Delegation}
+% =*= DIT832 STUFF =*=
+% \section*{Assignment 2: Work Delegation}
+% 
+% \begin{itemize}
+%     \item Erik: \ref{background}, \ref{relatedWork} A, \ref{method} C
+%     \item Mariia: Revised Quantization of LLMs \ref{relatedWork} B; Methodology Overview \ref{method} A, Threats to Validity \ref{method} D 
+%     \item Michal: Revised \ref{intro}, Abstract; Data Collection \ref{method}
+% \end{itemize}
+% 
+% \noindent
+% Additionally, all members of the group collectively participated in literature
+% review, proof-reading, refining research-questions, designing the experiment, and other tasks.
+% 
+% \subsection*{Changes since Assignment 1}
+% 
+% \noindent
+% Because the team members are continually getting more familiar with the research
+% and its objective, a lot of the text that was previously written is now,
+% unfortunately, obsolete (especially Introduction \ref{intro}). Highlighting
+% individual changes would be excessive and clutter the document. Instead we
+% highlight what has \underline{not} been changed:
+% 
+% \begin{itemize}
+%     \item Background \ref{background}
+% \end{itemize}
 
-\begin{itemize}
-    \item Erik: \ref{background}, \ref{relatedWork} A, \ref{method} C
-    \item Mariia: Revised Quantization of LLMs \ref{relatedWork} B; Methodology Overview \ref{method} A, Threats to Validity \ref{method} D 
-    \item Michal: Revised \ref{intro}, Abstract; Data Collection \ref{method}
-\end{itemize}
-
-\noindent
-Additionally, all members of the group collectively participated in literature
-review, proof-reading, refining research-questions, designing the experiment, and other tasks.
-
-\subsection*{Changes since Assignment 1}
-
-\noindent
-Because the team members are continually getting more familiar with the research
-and its objective, a lot of the text that was previously written is now,
-unfortunately, obsolete (especially Introduction \ref{intro}). Highlighting
-individual changes would be excessive and clutter the document. Instead we
-highlight what has \underline{not} been changed:
-
-\begin{itemize}
-    \item Background \ref{background}
-\end{itemize}
-
-% =*= USE LATER SECTION =*=
+% =*==*==*==*==*=
 
 % Subsection: Results(?)
 % We reassess the existing tool and make minor modifications to ensure compliance
@@ -612,13 +406,23 @@ highlight what has \underline{not} been changed:
 % the tool can be accessed via \url{https://github.com/SEM25-BSc/REST-at}.
 % A complete list of changes is noted below, cf. \ref{method}.}.
 % Subsection: Discussion / Results
+%
 % Write about Scalability? How does it perform with 10, 20, 50, 100, entries?
+%
+% MENTION QUANTIZATION STRICTNESS -if we pair wise the base-model with the
+% quantized models, assuming the quant models have more "aggressive" quantization
+% applied, we could identify the "drop-off" point, i.e., when the quantized models
+% start to significantly perform worse --- useful if they perform equally well up
+% until some point 
 
 % =*= USE LATER SECTION =*=
 
 \bibliographystyle{IEEEtran}
 \bibliography{lib}
 
+% FIXME: appendix should NOT follow double-column.
 \section*{Appendix}\label{appendix}
+
+\textit{(Left intentionally blank)}
 
 \end{document}
