@@ -469,9 +469,9 @@ Quantization generally led to reductions in both VRAM usage and inference time, 
 
 Notably, GPTQ consistently offers the best trade-off between performance and accuracy among all datasets. It persistently matches or improves on the baseline F1 score (e.g., Amina: NONE: 0.78 ± 0.09, GPTQ: 0.79 ± 0.01.; BTHS: NONE: 0.64 ± 0, GPTQ: 0.68 ± 0.02). It reduces VRAM on average by \>40\% compared to baseline NONE treatment. Moreover, no dataset shows severe degradations, supporting its reliability.
 
-In contrast, AQLM significantly reduced memory consumption (on average, 3,5 times), however it often falls short in recall and F1 score(e.g. 0 on BTHS, and not higher than 0,11 on the other data). The result is probably a consequence of AQLM's aggressive 2-bit quantization, which led to significant information loss and decreased the usability of the model for this use case.
+In contrast, AQLM significantly reduced memory consumption (on average, 3,5 times), however it often falls short in terms of recall and F1 score of 0 on BTHS, and not exceeding 0,11 on the remaining datasets. The result is probably a consequence of AQLM's aggressive 2-bit quantization, which led to significant information loss and decreased the usability of the model for this use case.
 
-AWQ results appear to be neutral, its gains in optimized resourced do not correlate to high accuracy. AWQ results occasionally outperform the base NONE model (e.g. BTHS )and performance is slightly lower than GPTQ in most cases.
+AWQ results appear to be neutral, its gains in optimized resourced do not correlate to high accuracy of tracelinks. AWQ results occasionally outperform the base NONE model (e.g. BTHS AQW: recall - 0.85 ± 0, F1 - 0.68 ± 0; NONE: recall - 0.84 ± 0.03, F1 - 0.64 ± 0). However, a clear  and performance is slightly lower than GPTQ in most cases.
 
 
 Naturally, NONE model has the highest memory and resources demands, but
