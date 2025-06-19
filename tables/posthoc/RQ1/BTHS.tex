@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\caption{Post-hoc Analysis: BTHS dataset}
+\resizebox{\columnwidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Metric & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+    \midrule
+    Balanced accuracy & GPTQ & NONE & 0.01 & Strong & 0.95 & Large \\
+    Recall & GPTQ & NONE & 0.08 & Not significant & 0.15 & Large \\
+    Precision & GPTQ & NONE & 0.01 & Strong & 0.95 & Large \\
+    \rowcolor{hl_color_green}
+    $F_1$-score & GPTQ & NONE & 0.01 & Strong & 0.95 & Large \\
+    \bottomrule
+    \end{tabular}
+}
+\label{tab:RQ1_posthoc}
+\end{table}

@@ -1,0 +1,71 @@
+\begin{table}[ht]
+\centering
+\tiny
+
+\begin{subtable}{\columnwidth}
+    \caption{Inference Time (s)}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & NONE & 0.02 & Moderate & 0.10 & Large \\
+    \rowcolor{yellow}AMINA & AWQ & GPTQ & 0.25 & Not significant & 0.20 & Large \\
+    AMINA & AWQ & NONE & 0.86 & Not significant & 0.20 & Large \\
+    AMINA & GPTQ & NONE & 0.86 & Not significant & 0.20 & Large \\
+    \midrule
+    BTHS & AQLM & AWQ & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AQLM & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    \rowcolor{yellow}BTHS & AWQ & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AWQ & NONE & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & GPTQ & NONE & 0.01 & Moderate & 0.10 & Large \\
+    \midrule
+    HW & AQLM & AWQ & 0.01 & Moderate & 0.00 & Large \\
+    HW & AQLM & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    HW & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    \rowcolor{yellow}HW & AWQ & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    HW & AWQ & NONE & 0.01 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 0.49 & Not significant & 0.50 & Negligible \\
+    \midrule
+    MOZILLA & AQLM & AWQ & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    \rowcolor{yellow}MOZILLA & AWQ & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & NONE & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & GPTQ & NONE & 0.06 & Not significant & 0.10 & Large \\
+    \bottomrule
+    \end{tabular}
+    } % end \resizebox
+\end{subtable}
+
+\begin{subtable}{\columnwidth}
+    \caption{Maximum VRAM Usage (MiB)}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0.01 & Moderate & 1.00 & Large \\
+    AMINA & AQLM & GPTQ & 0.02 & Moderate & 1.00 & Large \\
+    \rowcolor{yellow}AMINA & AQLM & NONE & 0.02 & Moderate & 1.00 & Large \\
+    AMINA & AWQ & GPTQ & 0.01 & Moderate & 1.00 & Large \\
+    \rowcolor{yellow}AMINA & AWQ & NONE & 0.02 & Moderate & 1.00 & Large \\
+    \rowcolor{yellow}AMINA & GPTQ & NONE & 0.02 & Moderate & 1.00 & Large \\
+    \midrule
+    MOZILLA & AQLM & AWQ & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0.01 & Moderate & 1.00 & Large \\
+    \rowcolor{yellow}MOZILLA & AQLM & NONE & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 0.01 & Moderate & 1.00 & Large \\
+    \rowcolor{yellow}MOZILLA & AWQ & NONE & 0.01 & Moderate & 1.00 & Large \\
+    \rowcolor{yellow}MOZILLA & GPTQ & NONE & 0.02 & Moderate & 1.00 & Large \\
+    \bottomrule
+    \end{tabular}
+    } % end \resizebox
+\end{subtable}
+
+\caption{Excerpt from Table~\ref{tab:R2_posthoc_full}}
+\label{tab:R2_posthoc}
+\end{table}

@@ -1,0 +1,36 @@
+\begin{table}[H]
+\centering
+\caption*{AMINA dataset}
+\begin{tabular}{llllllrlr}
+\toprule
+Metric & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+\midrule
+Balanced accuracy & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 20 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+\phantom & AWQ & NONE & 17 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+\phantom & GPTQ & NONE & 32 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+\midrule
+Recall & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.024 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 10 & 0.882 & 0.88 & Not significant & 0.40 & Small \\
+\phantom & AWQ & NONE & 13 & 0.882 & 0.88 & Not significant & 0.40 & Small \\
+\phantom & GPTQ & NONE & 24 & 0.882 & 0.88 & Not significant & 0.60 & Small \\
+\midrule
+Precision & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 20 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+\phantom & AWQ & NONE & 17 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+\phantom & GPTQ & NONE & 32 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+\midrule
+$F_1$-score & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 18 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+\phantom & AWQ & NONE & 17 & 1.000 & 1.00 & Not significant & 0.60 & Small \\
+\phantom & GPTQ & NONE & 30 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\\end{tabular}
+\label{tab:RQ1_posthoc_full}
+\end{table}

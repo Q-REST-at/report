@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\caption*{Health Watcher dataset}
+\resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Metric & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+    \midrule
+    Inference Time (s) & AQLM & AWQ & 0.01 & Moderate & 1.00 & Large \\
+    \phantom & AQLM & GPTQ & 0.01 & Moderate & 1.00 & Large \\
+    \phantom & AQLM & NONE & 0.01 & Moderate & 1.00 & Large \\
+    \rowcolor{hl_color_green}
+    \phantom & AWQ & GPTQ & 0.01 & Moderate & 1.00 & Large \\
+    \phantom & AWQ & NONE & 0.01 & Moderate & 1.00 & Large \\
+    \phantom & GPTQ & NONE & 0.49 & Not significant & 0.50 & Negligible \\
+    \bottomrule
+    \end{tabular}
+}
+\label{tab:RQ2_posthoc}
+\end{table}

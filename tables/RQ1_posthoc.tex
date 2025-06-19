@@ -1,0 +1,115 @@
+\begin{table}[ht]
+\centering
+%\tiny
+
+\begin{subtable}{\columnwidth}
+    \centering
+    \caption{Balanced Accuracy}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 1.00 & Not significant & 0.40 & Small \\
+    AMINA & AWQ & NONE & 1.00 & Not significant & 0.50 & Negligible \\
+    AMINA & GPTQ & NONE & 1.00 & Not significant & 0.50 & Negligible \\
+    \midrule
+    \rowcolor{yellow}BTHS & GPTQ & NONE & 0.01 & Strong & 0.95 & Large \\
+    \midrule
+    HW & AQLM & GPTQ & 0.02 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 0.02 & Moderate & 1.00 & Large \\
+    \midrule
+    \rowcolor{yellow}MOZILLA & AWQ & GPTQ & 1.00 & Not significant & 0.55 & Negligible \\
+    MOZILLA & AWQ & NONE & 1.00 & Not significant & 0.40 & Small \\
+    \bottomrule
+    \end{tabular}
+    } % end \resizebox
+\end{subtable}
+
+\begin{subtable}{\columnwidth}
+    \centering
+    \caption{Recall}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 0.88 & Not significant & 0.40 & Small \\
+    AMINA & AWQ & NONE & 0.88 & Not significant & 0.40 & Small \\
+    \rowcolor{yellow}AMINA & GPTQ & NONE & 0.88 & Not significant & 0.60 & Small \\
+    \midrule
+    BTHS & GPTQ & NONE & 0.08 & Not significant & 0.15 & Large \\
+    \midrule
+    HW & AQLM & NONE & 0.00 & Strong & 0.00 & Large \\
+    \midrule
+    MOZILLA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 0.68 & Not significant & 0.50 & Negligible \\
+    MOZILLA & AWQ & NONE & 0.04 & Moderate & 0.15 & Large \\
+    MOZILLA & GPTQ & NONE & 0.04 & Moderate & 0.15 & Large \\
+    \bottomrule
+    \end{tabular}
+    } % end \resizebox
+    
+\end{subtable}
+
+\begin{subtable}{\columnwidth}
+    \centering
+    \caption{Precision}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 1.00 & Not significant & 0.40 & Small \\
+    \rowcolor{yellow}AMINA & AWQ & NONE & 1.00 & Not significant & 0.50 & Negligible \\
+    \rowcolor{yellow}AMINA & GPTQ & NONE & 1.00 & Not significant & 0.50 & Negligible \\
+    \midrule
+    \rowcolor{yellow}BTHS & GPTQ & NONE & 0.01 & Strong & 0.95 & Large \\
+    \midrule
+    HW & AQLM & GPTQ & 0.02 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 0.02 & Moderate & 1.00 & Large \\
+    \midrule
+    MOZILLA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 1.00 & Not significant & 0.40 & Small \\
+    \rowcolor{yellow}MOZILLA & AWQ & NONE & 1.00 & Not significant & 0.45 & Negligible \\
+    \rowcolor{yellow}MOZILLA & GPTQ & NONE & 1.00 & Not significant & 0.45 & Negligible \\
+    \bottomrule
+    \end{tabular}
+    } % end \resizebox
+\end{subtable}
+
+\begin{subtable}{\columnwidth}
+    \centering
+    \caption{$F_1$-score}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 1.00 & Not significant & 0.40 & Small \\
+    \rowcolor{yellow}AMINA & AWQ & NONE & 1.00 & Not significant & 0.60 & Small \\
+    \rowcolor{yellow}AMINA & GPTQ & NONE & 1.00 & Not significant & 0.50 & Negligible \\
+    \midrule
+    \rowcolor{yellow}BTHS & GPTQ & NONE & 0.01 & Strong & 0.95 & Large \\
+    \midrule
+    HW & AQLM & GPTQ & 0.02 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 0.02 & Moderate & 1.00 & Large \\
+    \midrule
+    MOZILLA & AQLM & NONE & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 0.91 & Not significant & 0.45 & Negligible \\
+    MOZILLA & AWQ & NONE & 0.04 & Moderate & 0.20 & Large \\
+    MOZILLA & GPTQ & NONE & 0.04 & Moderate & 0.15 & Large \\
+    \bottomrule
+    \end{tabular}
+    } % end \resizebox
+    
+\end{subtable}
+
+\caption{Excerpt from Table~\ref{tab:RQ1_posthoc_full}}
+\label{tab:RQ1_posthoc}
+
+\end{table}

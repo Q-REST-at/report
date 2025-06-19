@@ -1,0 +1,36 @@
+\begin{table}[h]
+\centering
+\caption*{Mozilla dataset}
+\begin{tabular}{llllllrlr}
+\toprule
+Metric & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+\midrule
+Balanced accuracy & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 19 & 1.000 & 1.00 & Not significant & 0.55 & Negligible \\
+\phantom & AWQ & NONE & 15 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+\phantom & GPTQ & NONE & 24 & 1.000 & 1.00 & Not significant & 0.35 & Small \\
+\midrule
+Recall & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 13 & 0.675 & 0.68 & Not significant & 0.50 & Negligible \\
+\phantom & AWQ & NONE & 0 & 0.045 & 0.04 & Moderate & 0.15 & Large \\
+\phantom & GPTQ & NONE & 1 & 0.039 & 0.04 & Moderate & 0.15 & Large \\
+\midrule
+Precision & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 13 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+\phantom & AWQ & NONE & 12 & 1.000 & 1.00 & Not significant & 0.45 & Negligible \\
+\phantom & GPTQ & NONE & 18 & 1.000 & 1.00 & Not significant & 0.45 & Negligible \\
+\midrule
+$F_1$-score & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 21 & 0.906 & 0.91 & Not significant & 0.45 & Negligible \\
+\phantom & AWQ & NONE & 1 & 0.042 & 0.04 & Moderate & 0.20 & Large \\
+\phantom & GPTQ & NONE & 1 & 0.039 & 0.04 & Moderate & 0.15 & Large \\\end{tabular}
+\label{tab:RQ1_posthoc_full}
+\end{table}

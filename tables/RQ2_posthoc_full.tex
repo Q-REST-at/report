@@ -1,0 +1,63 @@
+\begin{table}[ht]
+\centering
+\tiny
+
+\begin{subtable}[t]{0.48\textwidth}
+    \caption{Inference Time (s)}
+    \begin{tabular}{llllllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & NONE & 53 & 0.023 & 0.02 & Moderate & 0.10 & Large \\
+    AMINA & AWQ & GPTQ & 45 & 0.252 & 0.25 & Not significant & 0.20 & Large \\
+    AMINA & AWQ & NONE & 36 & 0.864 & 0.86 & Not significant & 0.20 & Large \\
+    AMINA & GPTQ & NONE & 36 & 0.864 & 0.86 & Not significant & 0.20 & Large \\
+    BTHS & AQLM & AWQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AQLM & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AQLM & NONE & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AWQ & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & AWQ & NONE & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    BTHS & GPTQ & NONE & 54 & 0.012 & 0.01 & Moderate & 0.10 & Large \\
+    HW & AQLM & AWQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    HW & AQLM & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    HW & AQLM & NONE & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    HW & AWQ & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    HW & AWQ & NONE & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 35 & 0.492 & 0.49 & Not significant & 0.50 & Negligible \\
+    MOZILLA & AQLM & AWQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & NONE & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & NONE & 55 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & GPTQ & NONE & 46 & 0.064 & 0.06 & Not significant & 0.10 & Large \\
+    \bottomrule
+    \end{tabular}
+\end{subtable}
+\hfill
+\begin{subtable}[t]{0.48\textwidth}
+    \caption{Maximum VRAM Usage (MiB)}
+    \begin{tabular}{llllllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+    AMINA & AQLM & GPTQ & 0 & 0.024 & 0.02 & Moderate & 1.00 & Large \\
+    AMINA & AQLM & NONE & 0 & 0.024 & 0.02 & Moderate & 1.00 & Large \\
+    AMINA & AWQ & GPTQ & 0 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+    AMINA & AWQ & NONE & 0 & 0.024 & 0.02 & Moderate & 1.00 & Large \\
+    AMINA & GPTQ & NONE & 0 & 0.024 & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & AWQ & 0 & 0.017 & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & NONE & 0 & 0.017 & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 0 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+    MOZILLA & AWQ & NONE & 0 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+    MOZILLA & GPTQ & NONE & 0 & 0.017 & 0.02 & Moderate & 1.00 & Large \\
+    \bottomrule
+    \end{tabular}
+\end{subtable}
+
+\caption{Post-hoc pairwise comparison and effect size for RQ2}
+\label{tab:R2_posthoc_full}
+\end{table}

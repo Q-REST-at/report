@@ -1,0 +1,17 @@
+\begin{table}[ht]
+\centering
+\caption*{BTHS dataset}
+\begin{tabular}{llllllrlr}
+\toprule
+Metric & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+\midrule
+Inference Time (s) & AQLM & AWQ & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & AQLM & GPTQ & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & AQLM & NONE & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & AWQ & GPTQ & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & AWQ & NONE & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & GPTQ & NONE & 54 & 0.012 & 0.01 & Moderate & 0.90 & Large \\
+\bottomrule
+\end{tabular}
+\label{tab:RQ2_posthoc_full}
+\end{table}

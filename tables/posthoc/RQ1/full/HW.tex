@@ -1,0 +1,22 @@
+\begin{table}[h]
+\centering
+\caption*{HealthWatcher dataset}
+\begin{tabular}{llllllrlr}
+\toprule
+Metric & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+\midrule
+Balanced accuracy & AQLM & GPTQ & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & GPTQ & NONE & 55 & 0.016 & 0.02 & Moderate & 1.00 & Large \\
+\midrule
+Recall & AQLM & NONE & 0 & 0.004 & 0.00 & Strong & 0.00 & Large \\
+\midrule
+Precision & AQLM & GPTQ & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & GPTQ & NONE & 55 & 0.016 & 0.02 & Moderate & 1.00 & Large \\
+\midrule
+$F_1$-score & AQLM & GPTQ & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & GPTQ & NONE & 55 & 0.016 & 0.02 & Moderate & 1.00 & Large \\\end{tabular}
+\label{tab:RQ1_posthoc_full}
+\end{table}

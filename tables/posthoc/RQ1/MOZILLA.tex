@@ -1,0 +1,31 @@
+\begin{table}[ht]
+\centering
+\caption{Post-hoc Analysis: Mozilla dataset}
+\resizebox{\linewidth}{!}{
+    \begin{tabular}{llllrlr}
+    \toprule
+    Metric & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+    \midrule
+    Balanced accuracy  & AWQ & GPTQ & 1.00 & Not significant & 0.55 & Negligible \\
+    \rowcolor{hl_color_green}
+    \phantom & AWQ & NONE & 1.00 & Not significant & 0.40 & Small \\
+    \phantom & GPTQ & NONE & 1.00 & Not significant & 0.35 & Small \\
+    \midrule
+    Recall & AWQ & GPTQ & 0.68 & Not significant & 0.50 & Negligible \\
+    \phantom & AWQ & NONE & 0.04 & Moderate & 0.15 & Large \\
+    \phantom & GPTQ & NONE & 0.04 & Moderate & 0.15 & Large \\
+    \midrule
+    Precision & AWQ & GPTQ & 1.00 & Not significant & 0.40 & Small \\
+    \rowcolor{hl_color_green}
+    \phantom & AWQ & NONE & 1.00 & Not significant & 0.45 & Negligible \\
+    \rowcolor{hl_color_green}
+    \phantom & GPTQ & NONE & 1.00 & Not significant & 0.45 & Negligible \\
+    \midrule
+    $F_1$-score & AWQ & GPTQ & 0.91 & Not significant & 0.45 & Negligible \\
+    \phantom & AWQ & NONE & 0.04 & Moderate & 0.20 & Large \\
+    \phantom & GPTQ & NONE & 0.04 & Moderate & 0.15 & Large \\
+    \bottomrule
+    \end{tabular}
+}
+\label{tab:RQ1_posthoc}
+\end{table}

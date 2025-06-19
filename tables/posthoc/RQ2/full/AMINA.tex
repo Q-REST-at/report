@@ -1,0 +1,24 @@
+\begin{table}[H]
+\centering
+\caption*{AMINA dataset}
+\begin{tabular}{llllllrlr}
+\toprule
+Metric & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+\midrule
+Inference Time (s) & AQLM & AWQ & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & AQLM & GPTQ & 55 & 0.012 & 0.01 & Moderate & 1.00 & Large \\
+\phantom & AQLM & NONE & 53 & 0.023 & 0.02 & Moderate & 0.90 & Large \\
+\phantom & AWQ & GPTQ & 45 & 0.252 & 0.25 & Not significant & 0.80 & Large \\
+\phantom & AWQ & NONE & 36 & 0.864 & 0.86 & Not significant & 0.80 & Large \\
+\phantom & GPTQ & NONE & 36 & 0.864 & 0.86 & Not significant & 0.80 & Large \\
+\midrule
+Maximum VRAM Usage (MiB) & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AQLM & GPTQ & 0 & 0.024 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & AQLM & NONE & 0 & 0.024 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & AWQ & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+\phantom & AWQ & NONE & 0 & 0.024 & 0.02 & Moderate & 0.00 & Large \\
+\phantom & GPTQ & NONE & 0 & 0.024 & 0.02 & Moderate & 0.00 & Large \\
+\bottomrule
+\end{tabular}
+\label{tab:RQ2_posthoc_full}
+\end{table}

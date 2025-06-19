@@ -1,0 +1,72 @@
+\begin{table*}[h!]
+\centering
+\tiny
+\begin{subtable}{\textwidth}
+\centering
+\caption*{\textbf{AMINA dataset}}
+\begin{tabular}{|p{1cm} p{2.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{2.5cm} p{3.2cm}|}
+\tableheader
+\hline
+Model & Balanced Accuracy & Precision & Recall & $F_1$-score & Time to Analyze & VRAM Max Usage MiB \\
+\hline
+NONE & $0.88\pm0.07$ & $0.76\pm0.14$ & \colorbox{hl_color_green}{$0.82\pm0.12$} & $0.78\pm0.1$ & $139.36\pm250.53$ & $16962.0\pm2907.27$ \\
+AWQ & $0.87\pm0.07$ & $0.75\pm0.14$ & $0.81\pm0.12$ & $0.76\pm0.07$ & $70.15\pm130.02$ & $5582.0\pm197.97$ \\
+GPTQ & \colorbox{hl_color_green}{$0.89\pm0.05$} & \colorbox{hl_color_green}{$0.78\pm0.1$} & $0.82\pm0.13$ & \colorbox{hl_color_green}{$0.79\pm0.09$} & \colorbox{hl_color_green}{$40.62\pm46.7$} & $6533.4\pm196.61$ \\
+AQLM & $0.52\pm0.06$ & $0.07\pm0.13$ & $0.01\pm0.02$ & $0.02\pm0.04$ & $646.32\pm464.42$ & \colorbox{hl_color_green}{$4060.0\pm145.34$} \\
+\hline
+\end{tabular}
+\end{subtable}
+\vspace{2.5mm}
+
+\begin{subtable}{\textwidth}
+\centering
+\caption*{\textbf{BTHS dataset}}
+\begin{tabular}{|p{1cm} p{2.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{2.5cm} p{3.2cm}|}
+\hline
+\tableheader
+Model & Balanced Accuracy & Precision & Recall & $F_1$-score & Time to Analyze & VRAM Max Usage MiB \\
+\hline
+NONE & $0.74\pm0.0$ & $0.52\pm0.01$ & $0.84\pm0.03$ & $0.64\pm0.0$ & \colorbox{hl_color_green}{$8.39\pm0.09$} & $16327.0\pm0.0$ \\
+AWQ & $0.77\pm0.0$ & $0.57\pm0.0$ & \colorbox{hl_color_green}{$0.85\pm0.0$} & \colorbox{hl_color_green}{$0.68\pm0.0$} & $13.7\pm0.27$ & $6089.0\pm0.0$ \\
+GPTQ & \colorbox{hl_color_green}{$0.78\pm0.02$} & \colorbox{hl_color_green}{$0.6\pm0.03$} & $0.8\pm0.02$ & $0.68\pm0.02$ & $9.1\pm0.32$ & $7175.0\pm0.0$ \\
+AQLM & $0.42\pm0.0$ & $0.0\pm0.0$ & $0.0\pm0.0$ & $0.0\pm0.0$ & $551.14\pm109.3$ & \colorbox{hl_color_green}{$4766.6\pm58.66$} \\
+\hline
+\end{tabular}
+\end{subtable}
+\vspace{2.5mm}
+
+\begin{subtable}{\textwidth}
+\centering
+\caption*{\textbf{Health Watcher dataset}}
+\begin{tabular}{|p{1cm} p{2.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{2.5cm} p{3.2cm}|}
+\hline
+\tableheader
+Model & Balanced Accuracy & Precision & Recall & $F_1$-score & Time to Analyze & VRAM Max Usage MiB \\
+\hline
+NONE & $0.6\pm0.01$ & $0.28\pm0.02$ & $0.39\pm0.06$ & $0.33\pm0.03$ & \colorbox{hl_color_green}{$9.36\pm1.19$} & $15531.0\pm0.0$ \\
+AWQ & $0.61\pm0.0$ & $0.3\pm0.0$ & $0.33\pm0.0$ & $0.32\pm0.0$ & $22.88\pm0.58$ & $5519.0\pm0.0$ \\
+GPTQ & \colorbox{hl_color_green}{$0.64\pm0.01$} & \colorbox{hl_color_green}{$0.34\pm0.01$} & \colorbox{hl_color_green}{$0.56\pm0.0$} & \colorbox{hl_color_green}{$0.42\pm0.01$} & $9.94\pm0.83$ & $6463.0\pm0.0$ \\
+AQLM & $0.47\pm0.03$ & $0.04\pm0.07$ & $0.04\pm0.07$ & $0.04\pm0.07$ & $433.99\pm105.95$ & \colorbox{hl_color_green}{$4087.4\pm84.8$} \\
+\hline
+\end{tabular}
+\end{subtable}
+\vspace{2.5mm}
+
+\begin{subtable}{\textwidth}
+\centering
+\caption*{\textbf{Mozilla dataset}}
+\begin{tabular}{p{1cm} p{2.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{2.5cm} p{3.2cm}}
+\hline
+\tableheader
+Model & Balanced Accuracy & Precision & Recall & $F_1$-score & Time to Analyze & VRAM Max Usage MiB \\
+\hline
+NONE & $0.92\pm0.06$ & $0.86\pm0.13$ & \colorbox{hl_color_green}{$0.63\pm0.14$} & \colorbox{hl_color_green}{$0.71\pm0.11$} & \colorbox{hl_color_green}{$15.67\pm2.49$} & $16128.4\pm145.76$ \\
+AWQ & $0.92\pm0.06$ & $0.87\pm0.12$ & $0.55\pm0.16$ & $0.66\pm0.13$ & $19.6\pm2.54$ & $6146.0\pm203.28$ \\
+GPTQ & \colorbox{hl_color_green}{$0.93\pm0.06$} & \colorbox{hl_color_green}{$0.88\pm0.12$} & $0.54\pm0.13$ & $0.66\pm0.12$ & $16.59\pm1.92$ & $7093.4\pm186.49$ \\
+AQLM & $0.55\pm0.06$ & $0.13\pm0.12$ & $0.15\pm0.11$ & $0.13\pm0.11$ & $398.29\pm320.22$ & \colorbox{hl_color_green}{$4504.0\pm148.14$} \\
+\hline
+\end{tabular}
+\end{subtable}
+\caption{Key metrics per dataset with $\mu \text{ (mean)} \pm \sigma \text{ (std)}$}
+\label{tab:metric_summary}
+\end{table*}

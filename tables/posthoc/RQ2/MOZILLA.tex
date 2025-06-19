@@ -1,0 +1,24 @@
+\begin{table}[ht]
+\centering
+\caption*{Post-hoc Analysis: Mozilla dataset}
+\label{tab:posthoc_mozilla}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{llllrlr}
+    \toprule
+    Metric & Group $1$ & Group $2$ & $p$.adj & $p$.adj.signif & VDA & Magnitude\\
+    \midrule
+    Inference Time (s) & AQLM & NONE & 0.01 & Moderate & 1.00 & Large \\
+    \rowcolor{hl_color_green}
+    \phantom & AWQ & GPTQ & 0.01 & Moderate & 1.00 & Large \\
+    \phantom & AWQ & NONE & 0.01 & Moderate & 1.00 & Large \\
+    \phantom & GPTQ & NONE & 0.06 & Not significant & 0.90 & Large \\
+    \midrule
+    Maximum VRAM Usage (MiB) & AQLM & NONE & 0.02 & Moderate & 0.00 & Large \\
+    \phantom & AWQ & NONE & 0.01 & Moderate & 0.00 & Large \\
+    \phantom & AQLM & AWQ & 0.02 & Moderate & 0.00 & Large \\
+    \phantom & AQLM & GPTQ & 0.01 & Moderate & 0.00 & Large \\
+    \phantom & GPTQ & NONE & 0.02 & Moderate & 0.00 & Large \\
+    \bottomrule
+    \end{tabular}
+}
+\end{table}

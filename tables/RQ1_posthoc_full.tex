@@ -1,0 +1,115 @@
+\begin{table}[ht]
+\centering
+\tiny
+
+\begin{subtable}[t]{0.47\textwidth}
+    \centering
+    \caption{Balanced Accuracy}
+    \begin{tabular}{llllllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 20 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+    AMINA & AWQ & NONE & 17 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+    AMINA & GPTQ & NONE & 32 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+    BTHS & GPTQ & NONE & 45 & 0.008 & 0.01 & Strong & 0.95 & Large \\
+    HW & AQLM & GPTQ & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+    HW & AQLM & NONE & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 55 & 0.016 & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 19 & 1.000 & 1.00 & Not significant & 0.55 & Negligible \\
+    MOZILLA & AWQ & NONE & 15 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+    MOZILLA & GPTQ & NONE & 24 & 1.000 & 1.00 & Not significant & 0.35 & Small \\
+    \bottomrule
+    \end{tabular}
+\end{subtable}
+\hfill
+\begin{subtable}[t]{0.47\textwidth}
+    \centering
+    \caption{Recall}
+    \begin{tabular}{llllllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & GPTQ & 0 & 0.024 & 0.02 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 10 & 0.882 & 0.88 & Not significant & 0.40 & Small \\
+    AMINA & AWQ & NONE & 13 & 0.882 & 0.88 & Not significant & 0.40 & Small \\
+    AMINA & GPTQ & NONE & 24 & 0.882 & 0.88 & Not significant & 0.60 & Small \\
+    BTHS & GPTQ & NONE & 8 & 0.081 & 0.08 & Not significant & 0.15 & Large \\
+    HW & AQLM & NONE & 0 & 0.004 & 0.00 & Strong & 0.00 & Large \\
+    MOZILLA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 13 & 0.675 & 0.68 & Not significant & 0.50 & Negligible \\
+    MOZILLA & AWQ & NONE & 0 & 0.045 & 0.04 & Moderate & 0.15 & Large \\
+    MOZILLA & GPTQ & NONE & 1 & 0.039 & 0.04 & Moderate & 0.15 & Large \\
+    \bottomrule
+    \end{tabular}
+\end{subtable}
+
+\vspace{1em}
+
+\begin{subtable}[t]{0.47\textwidth}
+    \centering
+    \caption{Precision}
+    \begin{tabular}{llllllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 20 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+    AMINA & AWQ & NONE & 17 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+    AMINA & GPTQ & NONE & 32 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+    BTHS & GPTQ & NONE & 45 & 0.008 & 0.01 & Strong & 0.95 & Large \\
+    HW & AQLM & GPTQ & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+    HW & AQLM & NONE & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 55 & 0.016 & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 13 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+    MOZILLA & AWQ & NONE & 12 & 1.000 & 1.00 & Not significant & 0.45 & Negligible \\
+    MOZILLA & GPTQ & NONE & 18 & 1.000 & 1.00 & Not significant & 0.45 & Negligible \\
+    \bottomrule
+    \end{tabular}
+\end{subtable}
+\hfill
+\begin{subtable}[t]{0.47\textwidth}
+    \centering
+    \caption{$F_1$-score}
+    \begin{tabular}{llllllrlr}
+    \toprule
+    Dataset & Group $1$ & Group $2$ & Statistic & $p$ & $p$.adj & $p$.adj.signif & VDA & Magnitude \\
+    \midrule
+    AMINA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    AMINA & AWQ & GPTQ & 18 & 1.000 & 1.00 & Not significant & 0.40 & Small \\
+    AMINA & AWQ & NONE & 17 & 1.000 & 1.00 & Not significant & 0.60 & Small \\
+    AMINA & GPTQ & NONE & 30 & 1.000 & 1.00 & Not significant & 0.50 & Negligible \\
+    BTHS & GPTQ & NONE & 45 & 0.008 & 0.01 & Strong & 0.95 & Large \\
+    HW & AQLM & GPTQ & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+    HW & AQLM & NONE & 0 & 0.016 & 0.02 & Moderate & 0.00 & Large \\
+    HW & GPTQ & NONE & 55 & 0.016 & 0.02 & Moderate & 1.00 & Large \\
+    MOZILLA & AQLM & AWQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & GPTQ & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AQLM & NONE & 0 & 0.012 & 0.01 & Moderate & 0.00 & Large \\
+    MOZILLA & AWQ & GPTQ & 21 & 0.906 & 0.91 & Not significant & 0.45 & Negligible \\
+    MOZILLA & AWQ & NONE & 1 & 0.042 & 0.04 & Moderate & 0.20 & Large \\
+    MOZILLA & GPTQ & NONE & 1 & 0.039 & 0.04 & Moderate & 0.15 & Large \\
+    \bottomrule
+    \end{tabular}
+    
+\end{subtable}
+\caption{Post-hoc pairwise comparison and effect size for RQ1}
+\label{tab:RQ1_posthoc_full}
+\end{table}
